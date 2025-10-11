@@ -220,14 +220,33 @@ export const apiClient = {
     async login(data: LoginRequest): Promise<ApiResponse<AuthResponse>> {
       await delay(600);
 
-      // Find user
-      const user = storage.users.find((u) => u.email === data.email);
+      // For demo purposes, find user by email or accept any valid email format
+      let user = storage.users.find((u) => u.email === data.email);
+
+      // If user doesn't exist and email looks valid, create demo user
+      if (!user && data.email && data.email.includes("@")) {
+        user = {
+          id: generateId(),
+          name: data.email
+            .split("@")[0]
+            .replace(/[^a-zA-Z]/g, " ")
+            .replace(/\b\w/g, (l) => l.toUpperCase()),
+          email: data.email,
+          phone: "+1-555-0123",
+          country: "United States",
+          nationality: "American",
+          dateOfBirth: "1990-01-01",
+          kycStatus: "verified" as const,
+          avatar: "",
+        };
+        storage.users.push(user);
+        console.log(`[v0] Demo user created: ${user.email}`);
+      }
+
+      // Accept any password for demo purposes
       if (!user) {
         return createErrorResponse("AUTH_002", "Invalid credentials");
       }
-
-      // In real app, verify password hash
-      // For mock, accept any password
 
       // Generate session token
       const token = `mock_token_${generateId()}`;

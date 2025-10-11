@@ -21,7 +21,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ArrowRight, RefreshCw, Info, Wallet } from "@/lib/icons";
-import { fetchAllExchangeRates } from "@/lib/exchange-rates";
+import {
+  fetchAllExchangeRates,
+  getBankExchangeRates,
+} from "@/lib/exchange-rates";
 
 type Currency = "USD" | "EUR" | "GBP" | "SAR" | "AED" | "ETB";
 
@@ -48,6 +51,7 @@ export default function SendAmountPage() {
   const [walletBalances, setWalletBalances] = useState<any>({});
   const [exchangeRates, setExchangeRates] = useState<any>({});
   const [fees, setFees] = useState({ transferFee: 0, totalFee: 0 });
+  const [bankExchangeRates, setBankExchangeRates] = useState<any>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -62,15 +66,24 @@ export default function SendAmountPage() {
 
   const loadData = async () => {
     try {
+      const token = localStorage.getItem("auth_token");
       // Load recipient
-      const recipientRes = await fetch(`/api/recipients/${recipientId}`);
+      const recipientRes = await fetch(`/api/recipients/${recipientId}`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      });
       const recipientData = await recipientRes.json();
       if (recipientData.success) {
         setRecipient(recipientData.data);
       }
 
       // Load wallet balances
-      const balanceRes = await fetch("/api/wallet/balance");
+      const balanceRes = await fetch("/api/wallet/balance", {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      });
       const balanceData = await balanceRes.json();
       if (balanceData.success) {
         setWalletBalances(balanceData.data);
@@ -79,6 +92,10 @@ export default function SendAmountPage() {
       // Load exchange rates
       const rates = await fetchAllExchangeRates();
       setExchangeRates(rates);
+
+      // Load bank-specific exchange rates
+      const bankRates = await getBankExchangeRates();
+      setBankExchangeRates(bankRates);
     } catch (error) {
       console.error("[v0] Error loading data:", error);
     } finally {
@@ -88,9 +105,13 @@ export default function SendAmountPage() {
 
   const calculateFees = async () => {
     try {
+      const token = localStorage.getItem("auth_token");
       const res = await fetch("/api/send/calculate-fees", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
         body: JSON.stringify({
           amount: Number.parseFloat(amount),
           currency,
@@ -144,10 +165,13 @@ export default function SendAmountPage() {
   const totalAmount = numericAmount + fees.transferFee;
 
   const bankRate =
-    selectedBank && exchangeRates[currency]
-      ? exchangeRates[currency].banks.find((b: any) => b.code === selectedBank)
-          ?.buyRate || exchangeRates[currency].rate
-      : exchangeRates[currency]?.rate || 0;
+    selectedBank && bankExchangeRates[selectedBank] && currency === "USD"
+      ? bankExchangeRates[selectedBank].usdToEtb
+      : selectedBank && currency === "USD"
+      ? 56.8 // Default if no bank rate available
+      : currency === "USD"
+      ? 56.8
+      : 0; // Placeholder rates for other currencies
 
   const recipientReceives = numericAmount * bankRate;
 

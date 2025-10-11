@@ -33,29 +33,29 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // For demo purposes, accept any email and password combination
-      // In real app, this would validate against backend
-      const mockResponse = {
-        success: true,
-        data: {
-          user: {
-            id: "demo-user-123",
-            email: email,
-            name: email.split("@")[0],
-            kycStatus: "verified",
-            avatar: "",
-          },
-          token: `demo_token_${Date.now()}`,
-          refreshToken: "refresh_demo_token",
-          expiresIn: 3600 * 24 * 7,
+      // Call the login API - now accepts any email/password for demo
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      };
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
 
-      // Set the token directly in localStorage for demo
-      localStorage.setItem("auth_token", mockResponse.data.token);
-      localStorage.setItem("user_data", JSON.stringify(mockResponse.data.user));
+      const data = await response.json();
 
-      router.push("/dashboard");
+      if (data.success) {
+        // Store auth data
+        localStorage.setItem("auth_token", data.data.token);
+        localStorage.setItem("user_data", JSON.stringify(data.data.user));
+
+        router.push("/dashboard");
+      } else {
+        setError(data.error?.message || "Login failed");
+      }
     } catch (err) {
       setError("An unexpected error occurred");
     } finally {
