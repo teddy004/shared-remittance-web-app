@@ -77,10 +77,20 @@ export default function SendConfirmPage() {
 
   const handleViewReceipt = () => {
     if (transactionData?.transactionId) {
+      // Get transaction parameters from URL
+      const searchParams = new URLSearchParams(window.location.search);
+      const amount = searchParams.get("amount") || "100.00";
+      const currency = searchParams.get("currency") || "USD";
+      const recipient = searchParams.get("recipient") || "Tigist Alemu";
+      const bank = searchParams.get("bank") || "Commercial Bank of Ethiopia";
+      const rate = searchParams.get("rate") || "56.8";
+
       router.push(
         `/dashboard/transactions/${String(
           transactionData.transactionId
-        )}/receipt`
+        )}/receipt?ref=${
+          transactionData.referenceNumber
+        }&amount=${amount}&currency=${currency}&recipient=${recipient}&bank=${bank}&rate=${rate}`
       );
     }
   };
