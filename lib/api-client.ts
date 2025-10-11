@@ -901,20 +901,29 @@ export const apiClient = {
     },
 
     async create(
-      token: string,
-      data: CreateMoneyRequestRequest
+      token: string | undefined,
+      data: {
+        fromName: string;
+        fromEmail: string;
+        fromPhone?: string;
+        amount: number;
+        purpose: string;
+        description?: string;
+        dueDate: string;
+      }
     ): Promise<ApiResponse<MoneyRequestResponse>> {
       await delay(700);
 
-      const session = storage.sessions.get(token);
-      if (!session || session.expiresAt < Date.now()) {
-        return createErrorResponse("AUTH_006", "Invalid or expired session");
-      }
+      // Demo mode - no auth validation required
+      // const session = storage.sessions.get(token);
+      // if (!session || session.expiresAt < Date.now()) {
+      //   return createErrorResponse("AUTH_006", "Invalid or expired session");
+      // }
 
-      const user = storage.users.find((u) => u.id === session.userId);
-      if (!user) {
-        return createErrorResponse("USER_001", "User not found");
-      }
+      // const user = storage.users.find((u) => u.id === session.userId);
+      // if (!user) {
+      //   return createErrorResponse("USER_001", "User not found");
+      // }
 
       // Validate amount
       if (data.amount <= 0) {
@@ -933,9 +942,9 @@ export const apiClient = {
       // Create money request
       const request = {
         id: `req-${generateId()}`,
-        fromName: user.name,
-        fromEmail: user.email,
-        fromAvatar: user.avatar,
+        fromName: data.fromName,
+        fromEmail: data.fromEmail,
+        fromAvatar: "", // Demo user avatar
         amount: data.amount,
         purpose: data.purpose,
         description: data.description,
@@ -947,7 +956,7 @@ export const apiClient = {
       storage.moneyRequests.unshift(request);
 
       // In real app, send notification to recipient via email/SMS
-      console.log(`[v0] Money request sent to ${data.recipientEmail}`);
+      console.log(`[v0] Money request sent to ${data.fromEmail}`);
 
       return createResponse<MoneyRequestResponse>({
         id: request.id,
@@ -955,7 +964,7 @@ export const apiClient = {
         amount: request.amount,
         purpose: request.purpose,
         fromName: request.fromName,
-        toEmail: data.recipientEmail,
+        toEmail: data.fromEmail,
         dueDate: request.dueDate,
         createdAt: request.createdAt,
       });

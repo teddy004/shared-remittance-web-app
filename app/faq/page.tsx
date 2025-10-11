@@ -15,120 +15,109 @@ import {
   User,
   Globe,
 } from "@/lib/icons";
+import { useTranslation } from "@/lib/use-translation";
 
-const faqData = [
+const faqCategoriesData = [
   {
-    category: "Getting Started",
+    id: "getting-started",
+    nameKey: "faqCategoryGettingStarted" as const,
     icon: User,
     faqs: [
       {
-        question: "How do I create a GoozX account?",
-        answer:
-          "You can create an account by visiting our website and clicking 'Get Started'. You'll need to provide your email address, create a password, and complete our simple verification process.",
+        questionKey: "faqGettingStartedQ1" as const,
+        answerKey: "faqGettingStartedA1" as const,
       },
       {
-        question: "What documents do I need for verification?",
-        answer:
-          "For account verification, you'll need a valid government-issued ID (passport, driver's license, or national ID) and a recent selfie for identity verification.",
+        questionKey: "faqGettingStartedQ2" as const,
+        answerKey: "faqGettingStartedA2" as const,
       },
       {
-        question: "How long does the verification process take?",
-        answer:
-          "Most verifications are completed within 24 hours. You'll receive an email notification once your account is fully verified and ready to use.",
+        questionKey: "faqGettingStartedQ3" as const,
+        answerKey: "faqGettingStartedA3" as const,
       },
     ],
   },
   {
-    category: "Money Transfers",
+    id: "transfers",
+    nameKey: "faqCategoryTransfers" as const,
     icon: DollarSign,
     faqs: [
       {
-        question: "How long do transfers take to arrive?",
-        answer:
-          "Most transfers to Ethiopian bank accounts and mobile wallets arrive within 10 minutes. Some transfers may take up to 24 hours depending on the recipient's bank processing times.",
+        questionKey: "faqTransfersQ1" as const,
+        answerKey: "faqTransfersA1" as const,
       },
       {
-        question: "What are the transfer fees?",
-        answer:
-          "Our fees are competitive: 1% for transfers over $100, or a flat fee of $2.99 for transfers of $100 or less. Exchange rates are locked for 10 minutes after confirmation.",
+        questionKey: "faqTransfersQ2" as const,
+        answerKey: "faqTransfersA2" as const,
       },
       {
-        question: "What's the maximum amount I can send?",
-        answer:
-          "Verified users can send up to $10,000 per day and $50,000 per month. New users have lower limits until they complete full verification.",
+        questionKey: "faqTransfersQ3" as const,
+        answerKey: "faqTransfersA3" as const,
       },
       {
-        question: "Can I cancel a transfer after sending?",
-        answer:
-          "Transfers can be cancelled within 30 seconds of initiation. After that, the transfer is processed and cannot be cancelled for security reasons.",
+        questionKey: "faqTransfersQ4" as const,
+        answerKey: "faqTransfersA4" as const,
       },
       {
-        question: "What currencies can I send?",
-        answer:
-          "You can send in USD, EUR, GBP, and other major currencies. Recipients receive in ETB at competitive exchange rates.",
+        questionKey: "faqTransfersQ5" as const,
+        answerKey: "faqTransfersA5" as const,
       },
     ],
   },
   {
-    category: "Security & Privacy",
+    id: "security",
+    nameKey: "faqCategorySecurity" as const,
     icon: Shield,
     faqs: [
       {
-        question: "How secure are my transactions?",
-        answer:
-          "All transactions are protected with bank-level 256-bit encryption. We use multi-factor authentication and comply with international financial security standards.",
+        questionKey: "faqSecurityQ1" as const,
+        answerKey: "faqSecurityA1" as const,
       },
       {
-        question: "Is my personal information safe?",
-        answer:
-          "Yes, we use industry-standard encryption to protect your data. We never share your personal information with third parties without your consent.",
+        questionKey: "faqSecurityQ2" as const,
+        answerKey: "faqSecurityA2" as const,
       },
       {
-        question: "What happens if I lose my phone?",
-        answer:
-          "Contact our support team immediately. We can help secure your account and prevent unauthorized access to your funds.",
+        questionKey: "faqSecurityQ3" as const,
+        answerKey: "faqSecurityA3" as const,
       },
     ],
   },
   {
-    category: "Compliance & Regulations",
+    id: "compliance",
+    nameKey: "faqCategoryCompliance" as const,
     icon: FileText,
     faqs: [
       {
-        question: "Do you comply with financial regulations?",
-        answer:
-          "Yes, GoozX is fully compliant with Ethiopian financial regulations and international standards including AML (Anti-Money Laundering) and KYC (Know Your Customer) requirements.",
+        questionKey: "faqComplianceQ1" as const,
+        answerKey: "faqComplianceA1" as const,
       },
       {
-        question: "Why do you need my ID documents?",
-        answer:
-          "We require ID verification to comply with financial regulations and prevent fraud. This helps protect both you and our platform from illegal activities.",
+        questionKey: "faqComplianceQ2" as const,
+        answerKey: "faqComplianceA2" as const,
       },
       {
-        question: "Are my transactions reported to authorities?",
-        answer:
-          "We report suspicious activities as required by law, but normal transactions between verified users are private and not shared with third parties.",
+        questionKey: "faqComplianceQ3" as const,
+        answerKey: "faqComplianceA3" as const,
       },
     ],
   },
   {
-    category: "Tracking & Support",
+    id: "tracking",
+    nameKey: "faqCategoryTracking" as const,
     icon: Clock,
     faqs: [
       {
-        question: "How can I track my transfer?",
-        answer:
-          "You can track your transfer status in real-time through your dashboard. You'll also receive email and SMS notifications about your transfer progress.",
+        questionKey: "faqTrackingQ1" as const,
+        answerKey: "faqTrackingA1" as const,
       },
       {
-        question: "What if my recipient didn't receive the money?",
-        answer:
-          "Contact our support team immediately with your transaction reference number. We'll investigate and resolve any delivery issues within 24 hours.",
+        questionKey: "faqTrackingQ2" as const,
+        answerKey: "faqTrackingA2" as const,
       },
       {
-        question: "How do I contact customer support?",
-        answer:
-          "You can reach us via email at support@goozx.com, phone at +251 11 123 4567, or through our in-app chat support available 24/7.",
+        questionKey: "faqTrackingQ3" as const,
+        answerKey: "faqTrackingA3" as const,
       },
     ],
   },
@@ -138,19 +127,20 @@ export default function FaqPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { t } = useTranslation();
 
-  const filteredCategories = faqData
+  const filteredCategories = faqCategoriesData
     .map((category) => ({
       ...category,
       faqs: category.faqs.filter(
         (faq) =>
-          faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
+          t(faq.questionKey).toLowerCase().includes(searchQuery.toLowerCase()) ||
+          t(faq.answerKey).toLowerCase().includes(searchQuery.toLowerCase())
       ),
     }))
     .filter((category) => category.faqs.length > 0)
     .filter(
-      (category) => !selectedCategory || category.category === selectedCategory
+      (category) => !selectedCategory || t(category.nameKey) === selectedCategory
     );
 
   return (
@@ -159,19 +149,16 @@ export default function FaqPage() {
       <section className="py-20 bg-white border-b border-purple-100">
         <div className="container mx-auto px-6 text-center">
           <div className="mx-auto max-w-3xl space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold text-purple-700">
-              Frequently Asked Questions
-            </h1>
+            <h1 className="text-5xl md:text-6xl font-bold text-purple-700">{t("faqTitle")}</h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Find answers to common questions about GoozX remittance services,
-              security, and support.
+              {t("faqDescription")}
             </p>
 
             <div className="relative max-w-2xl mx-auto mt-8">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 type="text"
-                placeholder="Search for answers..."
+                placeholder={t("faqSearchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-12 pr-4 py-6 text-lg border-2 border-purple-200 focus:border-purple-600 rounded-xl shadow-sm"
@@ -194,27 +181,27 @@ export default function FaqPage() {
               }`}
             >
               <Globe className="w-4 h-4 mr-2" />
-              All Topics
+              {t("faqAllTopics")}
             </Button>
-            {faqData.map((category) => {
+            {faqCategoriesData.map((category) => {
               const Icon = category.icon;
               return (
                 <Button
-                  key={category.category}
-                  onClick={() => setSelectedCategory(category.category)}
+                  key={category.id}
+                  onClick={() => setSelectedCategory(t(category.nameKey))}
                   variant={
-                    selectedCategory === category.category
+                    selectedCategory === t(category.nameKey)
                       ? "default"
                       : "outline"
                   }
                   className={`rounded-full px-6 py-2 transition-all duration-300 ${
-                    selectedCategory === category.category
+                    selectedCategory === t(category.nameKey)
                       ? "bg-purple-600 text-white shadow-lg"
                       : "border-purple-200 hover:border-purple-400 hover:bg-purple-50"
                   }`}
                 >
                   <Icon className="w-4 h-4 mr-2" />
-                  {category.category}
+                  {t(category.nameKey)}
                 </Button>
               );
             })}
@@ -228,13 +215,13 @@ export default function FaqPage() {
           {filteredCategories.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-xl text-gray-500">
-                No results found for "{searchQuery}"
+                {t("faqNoResults").replace("{query}", searchQuery)}
               </p>
               <Button
                 onClick={() => setSearchQuery("")}
                 className="bg-purple-600 hover:bg-purple-700 mt-6"
               >
-                Clear Search
+                {t("faqClearSearch")}
               </Button>
             </div>
           ) : (
@@ -242,13 +229,13 @@ export default function FaqPage() {
               {filteredCategories.map((category, categoryIndex) => {
                 const Icon = category.icon;
                 return (
-                  <div key={category.category} className="space-y-6">
+                  <div key={category.id} className="space-y-6">
                     <div className="flex items-center gap-4 mb-6">
                       <div className="p-3 rounded-xl bg-purple-600 shadow-lg">
                         <Icon className="w-6 h-6 text-white" />
                       </div>
                       <h2 className="text-3xl font-bold text-gray-900">
-                        {category.category}
+                        {t(category.nameKey)}
                       </h2>
                     </div>
 
@@ -273,7 +260,7 @@ export default function FaqPage() {
                               >
                                 <div className="flex items-start justify-between gap-4">
                                   <h3 className="font-semibold text-lg text-gray-900 leading-relaxed pr-4">
-                                    {faq.question}
+                                    {t(faq.questionKey)}
                                   </h3>
                                   <ChevronDown
                                     className={`w-5 h-5 text-purple-600 flex-shrink-0 transition-transform duration-300 ${
@@ -288,7 +275,7 @@ export default function FaqPage() {
                                 <div className="px-6 pb-6 animate-in fade-in slide-in-from-top-2 duration-300">
                                   <div className="pt-4 border-t border-purple-100">
                                     <p className="text-gray-600 leading-relaxed">
-                                      {faq.answer}
+                                      {t(faq.answerKey)}
                                     </p>
                                   </div>
                                 </div>
@@ -305,17 +292,20 @@ export default function FaqPage() {
           )}
 
           <div className="text-center mt-20 bg-purple-600 rounded-3xl p-12 shadow-2xl">
-            <h3 className="text-3xl text-white font-bold mb-4">
-              Still Have Questions?
-            </h3>
+            <h3 className="text-3xl text-white font-bold mb-4">{t("faqStillHaveQuestions")}</h3>
             <p className="text-xl text-white/90 mb-8">
-              Our support team is here to help you with any questions about
-              GoozX services.
+              {t("faqHelpInfo")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
-                <Button className="bg-white text-purple-600 rounded-xl px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  Contact Support
+                <Button className="bg-white text-purple-600 rounded-xl px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">{t("faqContactSupport")}</Button>
+              </Link>
+              <Link href="/onboarding">
+                <Button
+                  variant="outline"
+                  className="border-2 border-white text-white hover:bg-white/10 rounded-xl px-8 py-6 text-lg font-semibold transition-all duration-300 bg-transparent"
+                >
+                  {t("faqContactSupport")}
                 </Button>
               </Link>
               <Link href="/onboarding">
@@ -323,7 +313,7 @@ export default function FaqPage() {
                   variant="outline"
                   className="border-2 border-white text-white hover:bg-white/10 rounded-xl px-8 py-6 text-lg font-semibold transition-all duration-300 bg-transparent"
                 >
-                  Get Started
+                  {t("getStarted")}
                 </Button>
               </Link>
             </div>
