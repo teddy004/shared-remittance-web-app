@@ -7,10 +7,13 @@ import { NavLinks } from "@/components/nav-links"
 import { LanguageSelector } from "@/components/language-selector"
 import { Bell } from "@/lib/icons"
 import { Badge } from "@/components/ui/badge"
+import { MobileNav } from "@/components/mobile-nav"
 import { useAuth } from "@/lib/auth-context"
+import { useTranslation } from "@/lib/use-translation"
 
 export function Header() {
   const { isAuthenticated, logout } = useAuth()
+  const { t } = useTranslation()
   const router = useRouter()
   const unreadCount = 2 // Mock unread count
 
@@ -29,7 +32,7 @@ export function Header() {
           <NavLinks />
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-6">
           <LanguageSelector />
           <Link href="/dashboard/notifications">
             <Button variant="ghost" size="icon" className="relative">
@@ -47,18 +50,21 @@ export function Header() {
               onClick={handleLogout}
               className="text-text-secondary hover:text-primary font-medium text-base"
             >
-              Logout
+              {t("login")}
             </Button>
           ) : (
             <Link href="/login">
               <Button variant="ghost" className="text-text-secondary hover:text-primary font-medium text-base">
-                Login
+                {t("login")}
               </Button>
             </Link>
           )}
           <Link href="/onboarding">
-            <Button className="btn-primary">Get Started</Button>
+            <Button className="btn-primary">{t("getStarted")}</Button>
           </Link>
+        </div>
+        <div className="md:hidden">
+          <MobileNav />
         </div>
       </div>
     </header>

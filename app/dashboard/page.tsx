@@ -39,22 +39,14 @@ export default function DashboardPage() {
 
   const loadDashboardData = async () => {
     try {
-      const token = localStorage.getItem("auth_token");
-      const balanceRes = await fetch("/api/wallet/balance", {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-      });
+      // Demo - no auth required
+      const balanceRes = await fetch("/api/wallet/balance");
       const balanceData = await balanceRes.json();
       if (balanceData.success) {
         setWalletBalance(balanceData.data);
       }
 
-      const txRes = await fetch("/api/transactions?limit=5", {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-      });
+      const txRes = await fetch("/api/transactions?limit=5");
       const txData = await txRes.json();
       if (txData.success) {
         setTransactions(txData.data);

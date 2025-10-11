@@ -1,156 +1,157 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent } from "@/components/ui/card"
-import { ChevronDown, Search, DollarSign, Clock, Shield, FileText, User, Globe } from "@/lib/icons"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  ChevronDown,
+  Search,
+  DollarSign,
+  Clock,
+  Shield,
+  FileText,
+  User,
+  Globe,
+} from "@/lib/icons";
+
+const faqData = [
+  {
+    category: "Getting Started",
+    icon: User,
+    faqs: [
+      {
+        question: "How do I create a GoozX account?",
+        answer:
+          "You can create an account by visiting our website and clicking 'Get Started'. You'll need to provide your email address, create a password, and complete our simple verification process.",
+      },
+      {
+        question: "What documents do I need for verification?",
+        answer:
+          "For account verification, you'll need a valid government-issued ID (passport, driver's license, or national ID) and a recent selfie for identity verification.",
+      },
+      {
+        question: "How long does the verification process take?",
+        answer:
+          "Most verifications are completed within 24 hours. You'll receive an email notification once your account is fully verified and ready to use.",
+      },
+    ],
+  },
+  {
+    category: "Money Transfers",
+    icon: DollarSign,
+    faqs: [
+      {
+        question: "How long do transfers take to arrive?",
+        answer:
+          "Most transfers to Ethiopian bank accounts and mobile wallets arrive within 10 minutes. Some transfers may take up to 24 hours depending on the recipient's bank processing times.",
+      },
+      {
+        question: "What are the transfer fees?",
+        answer:
+          "Our fees are competitive: 1% for transfers over $100, or a flat fee of $2.99 for transfers of $100 or less. Exchange rates are locked for 10 minutes after confirmation.",
+      },
+      {
+        question: "What's the maximum amount I can send?",
+        answer:
+          "Verified users can send up to $10,000 per day and $50,000 per month. New users have lower limits until they complete full verification.",
+      },
+      {
+        question: "Can I cancel a transfer after sending?",
+        answer:
+          "Transfers can be cancelled within 30 seconds of initiation. After that, the transfer is processed and cannot be cancelled for security reasons.",
+      },
+      {
+        question: "What currencies can I send?",
+        answer:
+          "You can send in USD, EUR, GBP, and other major currencies. Recipients receive in ETB at competitive exchange rates.",
+      },
+    ],
+  },
+  {
+    category: "Security & Privacy",
+    icon: Shield,
+    faqs: [
+      {
+        question: "How secure are my transactions?",
+        answer:
+          "All transactions are protected with bank-level 256-bit encryption. We use multi-factor authentication and comply with international financial security standards.",
+      },
+      {
+        question: "Is my personal information safe?",
+        answer:
+          "Yes, we use industry-standard encryption to protect your data. We never share your personal information with third parties without your consent.",
+      },
+      {
+        question: "What happens if I lose my phone?",
+        answer:
+          "Contact our support team immediately. We can help secure your account and prevent unauthorized access to your funds.",
+      },
+    ],
+  },
+  {
+    category: "Compliance & Regulations",
+    icon: FileText,
+    faqs: [
+      {
+        question: "Do you comply with financial regulations?",
+        answer:
+          "Yes, GoozX is fully compliant with Ethiopian financial regulations and international standards including AML (Anti-Money Laundering) and KYC (Know Your Customer) requirements.",
+      },
+      {
+        question: "Why do you need my ID documents?",
+        answer:
+          "We require ID verification to comply with financial regulations and prevent fraud. This helps protect both you and our platform from illegal activities.",
+      },
+      {
+        question: "Are my transactions reported to authorities?",
+        answer:
+          "We report suspicious activities as required by law, but normal transactions between verified users are private and not shared with third parties.",
+      },
+    ],
+  },
+  {
+    category: "Tracking & Support",
+    icon: Clock,
+    faqs: [
+      {
+        question: "How can I track my transfer?",
+        answer:
+          "You can track your transfer status in real-time through your dashboard. You'll also receive email and SMS notifications about your transfer progress.",
+      },
+      {
+        question: "What if my recipient didn't receive the money?",
+        answer:
+          "Contact our support team immediately with your transaction reference number. We'll investigate and resolve any delivery issues within 24 hours.",
+      },
+      {
+        question: "How do I contact customer support?",
+        answer:
+          "You can reach us via email at support@goozx.com, phone at +251 11 123 4567, or through our in-app chat support available 24/7.",
+      },
+    ],
+  },
+];
 
 export default function FaqPage() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const faqCategories = [
-    {
-      id: "getting-started",
-      name: "Getting Started",
-      icon: User,
-      color: "from-blue-500 to-cyan-500",
-      faqs: [
-        {
-          question: "How do I register for an account?",
-          answer:
-            "Download the GoozX app or visit our website. Complete KYC verification by uploading your ID documents. The process takes 2-3 business days for approval, after which you can access all features including higher transfer limits and additional services.",
-        },
-        {
-          question: "Can I send money without an account?",
-          answer:
-            "Yes, guest transfers up to $100 don't require registration. For higher amounts or recurring transfers, account creation is required for compliance and enhanced security. Creating an account also gives you access to transaction history and better rates.",
-        },
-        {
-          question: "What documents do I need for verification?",
-          answer:
-            "You'll need a valid government-issued ID (passport, driver's license, or national ID card) and proof of address (utility bill or bank statement from the last 3 months). For business accounts, additional documentation may be required.",
-        },
-      ],
-    },
-    {
-      id: "transfers",
-      name: "Transfers & Fees",
-      icon: DollarSign,
-      color: "from-purple-500 to-pink-500",
-      faqs: [
-        {
-          question: "How much does it cost to send money with GoozX?",
-          answer:
-            "Our fees start at 1% for transfers above $100. Calculated fees are shown transparently before confirming your transfer. We don't charge hidden fees for currency conversion or processing. The exact fee depends on the amount, destination, and payment method.",
-        },
-        {
-          question: "How long does a transfer take?",
-          answer:
-            "Most transfers complete within 10-30 minutes. Express transfers to mobile wallets are fastest, while bank transfers may take 1-2 business days depending on the recipient bank. You'll receive real-time updates on your transfer status.",
-        },
-        {
-          question: "Which countries can I send money to?",
-          answer:
-            "Send money to Ethiopia, Kenya, Uganda, Tanzania, Rwanda, and 50+ other African and Middle Eastern countries. Check our supported destinations list for complete coverage. We're constantly expanding to new markets.",
-        },
-        {
-          question: "What currencies are supported?",
-          answer:
-            "Send in USD, EUR, GBP, CAD, and major currencies. Recipient countries have local currencies (ETB for Ethiopia, KES for Kenya, UGX for Uganda, etc.). Exchange rates are competitive and transparently shown before you confirm your transfer.",
-        },
-        {
-          question: "Are there daily or monthly limits?",
-          answer:
-            "Limits vary by account verification level: Guest (up to $100/day), Basic KYC ($500/day, $2,000/month), Enhanced ($2,000/day, $10,000/month), Premium ($10,000/day, $50,000/month). Contact us to upgrade your limits based on your needs.",
-        },
-      ],
-    },
-    {
-      id: "security",
-      name: "Security & Safety",
-      icon: Shield,
-      color: "from-green-500 to-emerald-500",
-      faqs: [
-        {
-          question: "Is my money secure?",
-          answer:
-            "We use bank-level 256-bit SSL encryption and comply with international financial standards. All transfers are insured and regulated by relevant authorities. Your funds are held in segregated accounts and protected by multiple layers of security.",
-        },
-        {
-          question: "How do you protect my personal information?",
-          answer:
-            "We follow strict data protection regulations including GDPR. Your personal information is encrypted, stored securely, and never shared with third parties without your consent. We use multi-factor authentication and regular security audits to protect your account.",
-        },
-        {
-          question: "What if I suspect fraud on my account?",
-          answer:
-            "Contact our support team immediately at support@goozx.com or call our 24/7 hotline. We'll freeze your account, investigate the issue, and work to recover any unauthorized transactions. We also offer fraud protection insurance on all verified accounts.",
-        },
-      ],
-    },
-    {
-      id: "compliance",
-      name: "Compliance & Legal",
-      icon: FileText,
-      color: "from-orange-500 to-red-500",
-      faqs: [
-        {
-          question: "Is GoozX compliant with Ethiopian financial laws?",
-          answer:
-            "Yes, fully licensed and regulated. We work with authorized financial partners in Ethiopia and follow all Central Bank of Ethiopia (NBE) guidelines. Your money is safe and your transactions are fully compliant with local and international regulations.",
-        },
-        {
-          question: "Do you report transactions to authorities?",
-          answer:
-            "We comply with all anti-money laundering (AML) and counter-terrorism financing (CTF) regulations. Suspicious transactions are reported to relevant authorities as required by law. This helps keep the platform safe for all users.",
-        },
-        {
-          question: "What is your refund policy?",
-          answer:
-            "Transfers cannot be cancelled once initiated for security reasons. If there's an issue with delivery after 48 hours, contact our support team for assistance. Refunds are processed within 5-7 business days if the transfer fails or cannot be completed.",
-        },
-      ],
-    },
-    {
-      id: "tracking",
-      name: "Tracking & Support",
-      icon: Clock,
-      color: "from-indigo-500 to-purple-500",
-      faqs: [
-        {
-          question: "How do I track my transfer?",
-          answer:
-            "Once your transfer is initiated, you'll receive a tracking reference number via email and SMS. Use this in the app or on our website to check real-time status updates. You can also enable push notifications for instant updates.",
-        },
-        {
-          question: "What do I need to receive money?",
-          answer:
-            "Recipients need a valid ID for pickup. In Ethiopia, money can be received at mobile money accounts, agent locations, or directly to bank accounts. No recipient registration is required. They'll receive an SMS with pickup instructions.",
-        },
-        {
-          question: "How can I contact customer support?",
-          answer:
-            "Our support team is available 24/7 via live chat in the app, email at support@goozx.com, or phone at +1 (555) 123-4567. We also have a comprehensive help center with guides and tutorials. Average response time is under 2 hours.",
-        },
-      ],
-    },
-  ]
-
-  const filteredCategories = faqCategories
+  const filteredCategories = faqData
     .map((category) => ({
       ...category,
       faqs: category.faqs.filter(
         (faq) =>
           faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          faq.answer.toLowerCase().includes(searchQuery.toLowerCase()),
+          faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
       ),
     }))
     .filter((category) => category.faqs.length > 0)
-    .filter((category) => !selectedCategory || category.id === selectedCategory)
+    .filter(
+      (category) => !selectedCategory || category.category === selectedCategory
+    );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -158,9 +159,12 @@ export default function FaqPage() {
       <section className="py-20 bg-white border-b border-purple-100">
         <div className="container mx-auto px-6 text-center">
           <div className="mx-auto max-w-3xl space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold text-primary">Frequently Asked Questions</h1>
+            <h1 className="text-5xl md:text-6xl font-bold text-purple-700">
+              Frequently Asked Questions
+            </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Find quick answers to common questions about our remittance services.
+              Find answers to common questions about GoozX remittance services,
+              security, and support.
             </p>
 
             <div className="relative max-w-2xl mx-auto mt-8">
@@ -170,7 +174,7 @@ export default function FaqPage() {
                 placeholder="Search for answers..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-4 py-6 text-lg border-2 border-purple-200 focus:border-primary rounded-xl shadow-sm"
+                className="pl-12 pr-4 py-6 text-lg border-2 border-purple-200 focus:border-purple-600 rounded-xl shadow-sm"
               />
             </div>
           </div>
@@ -185,30 +189,34 @@ export default function FaqPage() {
               variant={selectedCategory === null ? "default" : "outline"}
               className={`rounded-full px-6 py-2 transition-all duration-300 ${
                 selectedCategory === null
-                  ? "btn-primary shadow-lg"
+                  ? "bg-purple-600 text-white shadow-lg"
                   : "border-purple-200 hover:border-purple-400 hover:bg-purple-50"
               }`}
             >
               <Globe className="w-4 h-4 mr-2" />
               All Topics
             </Button>
-            {faqCategories.map((category) => {
-              const Icon = category.icon
+            {faqData.map((category) => {
+              const Icon = category.icon;
               return (
                 <Button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  variant={selectedCategory === category.id ? "default" : "outline"}
+                  key={category.category}
+                  onClick={() => setSelectedCategory(category.category)}
+                  variant={
+                    selectedCategory === category.category
+                      ? "default"
+                      : "outline"
+                  }
                   className={`rounded-full px-6 py-2 transition-all duration-300 ${
-                    selectedCategory === category.id
-                      ? "btn-primary shadow-lg"
+                    selectedCategory === category.category
+                      ? "bg-purple-600 text-white shadow-lg"
                       : "border-purple-200 hover:border-purple-400 hover:bg-purple-50"
                   }`}
                 >
                   <Icon className="w-4 h-4 mr-2" />
-                  {category.name}
+                  {category.category}
                 </Button>
-              )
+              );
             })}
           </div>
         </div>
@@ -219,10 +227,12 @@ export default function FaqPage() {
         <div className="container mx-auto px-6 max-w-5xl">
           {filteredCategories.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-xl text-gray-500">No results found for "{searchQuery}"</p>
+              <p className="text-xl text-gray-500">
+                No results found for "{searchQuery}"
+              </p>
               <Button
                 onClick={() => setSearchQuery("")}
-                className="btn-primary mt-6 hover:shadow-lg transition-all duration-300"
+                className="bg-purple-600 hover:bg-purple-700 mt-6"
               >
                 Clear Search
               </Button>
@@ -230,27 +240,35 @@ export default function FaqPage() {
           ) : (
             <div className="space-y-12">
               {filteredCategories.map((category, categoryIndex) => {
-                const Icon = category.icon
+                const Icon = category.icon;
                 return (
-                  <div key={category.id} className="space-y-6">
+                  <div key={category.category} className="space-y-6">
                     <div className="flex items-center gap-4 mb-6">
-                      <div className="p-3 rounded-xl bg-primary shadow-lg">
+                      <div className="p-3 rounded-xl bg-purple-600 shadow-lg">
                         <Icon className="w-6 h-6 text-white" />
                       </div>
-                      <h2 className="text-3xl font-bold text-gray-900">{category.name}</h2>
+                      <h2 className="text-3xl font-bold text-gray-900">
+                        {category.category}
+                      </h2>
                     </div>
 
                     <div className="space-y-4">
                       {category.faqs.map((faq, faqIndex) => {
-                        const globalIndex = categoryIndex * 100 + faqIndex
+                        const globalIndex = categoryIndex * 100 + faqIndex;
                         return (
                           <Card
                             key={globalIndex}
-                            className="border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden card"
+                            className="border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
                           >
                             <CardContent className="p-0">
                               <button
-                                onClick={() => setOpenIndex(openIndex === globalIndex ? null : globalIndex)}
+                                onClick={() =>
+                                  setOpenIndex(
+                                    openIndex === globalIndex
+                                      ? null
+                                      : globalIndex
+                                  )
+                                }
                                 className="w-full text-left p-6 hover:bg-purple-50/50 transition-colors duration-200"
                               >
                                 <div className="flex items-start justify-between gap-4">
@@ -258,8 +276,10 @@ export default function FaqPage() {
                                     {faq.question}
                                   </h3>
                                   <ChevronDown
-                                    className={`w-5 h-5 text-primary flex-shrink-0 transition-transform duration-300 ${
-                                      openIndex === globalIndex ? "rotate-180" : ""
+                                    className={`w-5 h-5 text-purple-600 flex-shrink-0 transition-transform duration-300 ${
+                                      openIndex === globalIndex
+                                        ? "rotate-180"
+                                        : ""
                                     }`}
                                   />
                                 </div>
@@ -267,27 +287,34 @@ export default function FaqPage() {
                               {openIndex === globalIndex && (
                                 <div className="px-6 pb-6 animate-in fade-in slide-in-from-top-2 duration-300">
                                   <div className="pt-4 border-t border-purple-100">
-                                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                                    <p className="text-gray-600 leading-relaxed">
+                                      {faq.answer}
+                                    </p>
                                   </div>
                                 </div>
                               )}
                             </CardContent>
                           </Card>
-                        )
+                        );
                       })}
                     </div>
                   </div>
-                )
+                );
               })}
             </div>
           )}
 
-          <div className="text-center mt-20 bg-primary rounded-3xl p-12 shadow-2xl">
-            <h3 className="text-3xl text-white font-bold mb-4">Still have questions?</h3>
-            <p className="text-xl text-white/90 mb-8">We're here to help 24/7</p>
+          <div className="text-center mt-20 bg-purple-600 rounded-3xl p-12 shadow-2xl">
+            <h3 className="text-3xl text-white font-bold mb-4">
+              Still Have Questions?
+            </h3>
+            <p className="text-xl text-white/90 mb-8">
+              Our support team is here to help you with any questions about
+              GoozX services.
+            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
-                <Button className="btn-secondary rounded-xl px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <Button className="bg-white text-purple-600 rounded-xl px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                   Contact Support
                 </Button>
               </Link>
@@ -304,5 +331,5 @@ export default function FaqPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }
