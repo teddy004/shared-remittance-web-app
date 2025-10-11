@@ -426,19 +426,14 @@ export const apiClient = {
     },
   },
 
-  // Wallet APIs
+  // Wallet APIs (demo - no auth required)
   wallet: {
     async getBalance(
-      token: string
+      token?: string
     ): Promise<ApiResponse<WalletBalanceResponse>> {
       await delay(300);
 
-      // For demo purposes, skip session validation
-      // const session = storage.sessions.get(token);
-      // if (!session || session.expiresAt < Date.now()) {
-      //   return createErrorResponse("AUTH_006", "Invalid or expired session");
-      // }
-
+      // Demo mode - no auth validation required
       return createResponse<WalletBalanceResponse>({
         usd: storage.walletBalances.usd,
         etb: storage.walletBalances.etb,
@@ -702,32 +697,22 @@ export const apiClient = {
     },
   },
 
-  // Recipient APIs
+  // Recipient APIs (demo - no auth required)
   recipients: {
-    async getAll(token: string): Promise<ApiResponse<typeof mockRecipients>> {
+    async getAll(token?: string): Promise<ApiResponse<typeof mockRecipients>> {
       await delay(300);
 
-      // For demo purposes, skip session validation
-      // const session = storage.sessions.get(token)
-      // if (!session || session.expiresAt < Date.now()) {
-      //   return createErrorResponse("AUTH_006", "Invalid or expired session")
-      // }
-
+      // Demo mode - no auth validation required
       return createResponse(storage.recipients);
     },
 
     async getById(
-      token: string,
+      token: string | undefined,
       id: string
     ): Promise<ApiResponse<(typeof mockRecipients)[0]>> {
       await delay(200);
 
-      // For demo purposes, skip session validation
-      // const session = storage.sessions.get(token);
-      // if (!session || session.expiresAt < Date.now()) {
-      //   return createErrorResponse("AUTH_006", "Invalid or expired session");
-      // }
-
+      // Demo mode - no auth validation required
       const recipient = storage.recipients.find((r) => r.id === id);
       if (!recipient) {
         return createErrorResponse("RECIPIENT_001", "Recipient not found");
@@ -1131,7 +1116,7 @@ export const apiClient = {
     },
 
     async calculateFees(
-      token: string,
+      token: string | undefined,
       amount: number,
       currency: string
     ): Promise<
@@ -1145,10 +1130,11 @@ export const apiClient = {
     > {
       await delay(200);
 
-      const session = storage.sessions.get(token);
-      if (!session || session.expiresAt < Date.now()) {
-        return createErrorResponse("AUTH_006", "Invalid or expired session");
-      }
+      // Demo mode - no auth validation required
+      // const session = storage.sessions.get(token);
+      // if (!session || session.expiresAt < Date.now()) {
+      //   return createErrorResponse("AUTH_006", "Invalid or expired session");
+      // }
 
       if (amount <= 0) {
         return createErrorResponse("TRANSACTION_003", "Invalid amount");
@@ -1172,7 +1158,7 @@ export const apiClient = {
     },
 
     async initiate(
-      token: string,
+      token: string | undefined,
       data: CreateTransactionRequest & { requireOTP?: boolean }
     ): Promise<
       ApiResponse<{
@@ -1183,10 +1169,11 @@ export const apiClient = {
     > {
       await delay(600);
 
-      const session = storage.sessions.get(token);
-      if (!session || session.expiresAt < Date.now()) {
-        return createErrorResponse("AUTH_006", "Invalid or expired session");
-      }
+      // For demo purposes, skip session validation
+      // const session = storage.sessions.get(token);
+      // if (!session || session.expiresAt < Date.now()) {
+      //   return createErrorResponse("AUTH_006", "Invalid or expired session");
+      // }
 
       // Validate recipient
       const recipient = storage.recipients.find(
@@ -1214,11 +1201,9 @@ export const apiClient = {
       const requiresOTP = data.amount > 500;
 
       if (requiresOTP) {
-        const user = storage.users.find((u) => u.id === session.userId);
-        if (user) {
-          // Send OTP
-          await apiClient.auth.sendOTP(user.email);
-        }
+        // For demo purposes, skip OTP sending in initiate
+        // In real app, would send OTP here
+        console.log("[v0] High-value transaction detected, OTP would be sent");
       }
 
       // Create pending transaction
@@ -1232,22 +1217,23 @@ export const apiClient = {
     },
 
     async confirm(
-      token: string,
+      token: string | undefined,
       transactionId: string,
       otp?: string
     ): Promise<ApiResponse<TransactionResponse>> {
       await delay(1000);
 
-      const session = storage.sessions.get(token);
-      if (!session || session.expiresAt < Date.now()) {
-        return createErrorResponse("AUTH_006", "Invalid or expired session");
-      }
+      // Demo mode - no auth validation required
+      // const session = storage.sessions.get(token);
+      // if (!session || session.expiresAt < Date.now()) {
+      //   return createErrorResponse("AUTH_006", "Invalid or expired session");
+      // }
 
       // In real app, verify OTP if required
       // For mock, skip OTP verification
 
       // This would normally retrieve the pending transaction
-      // For mock, we'll just return success
+      // For mock, we'll just return success with proper details
       return createResponse<TransactionResponse>({
         id: transactionId,
         status: "completed",
@@ -1258,9 +1244,7 @@ export const apiClient = {
         recipientName: "Mock Recipient",
         referenceNumber: generateReferenceNumber(),
         createdAt: new Date().toISOString(),
-        estimatedDelivery: new Date(
-          Date.now() + 24 * 60 * 60 * 1000
-        ).toISOString(),
+        estimatedDelivery: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes for faster feedback
       });
     },
   },

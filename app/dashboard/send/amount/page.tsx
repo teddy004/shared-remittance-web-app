@@ -67,23 +67,15 @@ export default function SendAmountPage() {
   const loadData = async () => {
     try {
       const token = localStorage.getItem("auth_token");
-      // Load recipient
-      const recipientRes = await fetch(`/api/recipients/${recipientId}`, {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-      });
+      // Load recipient (demo - no auth required)
+      const recipientRes = await fetch(`/api/recipients/${recipientId}`);
       const recipientData = await recipientRes.json();
       if (recipientData.success) {
         setRecipient(recipientData.data);
       }
 
-      // Load wallet balances
-      const balanceRes = await fetch("/api/wallet/balance", {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-      });
+      // Load wallet balances (demo - no auth required)
+      const balanceRes = await fetch("/api/wallet/balance");
       const balanceData = await balanceRes.json();
       if (balanceData.success) {
         setWalletBalances(balanceData.data);
@@ -105,12 +97,11 @@ export default function SendAmountPage() {
 
   const calculateFees = async () => {
     try {
-      const token = localStorage.getItem("auth_token");
+      // Demo - no auth required
       const res = await fetch("/api/send/calculate-fees", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : "",
         },
         body: JSON.stringify({
           amount: Number.parseFloat(amount),
@@ -121,9 +112,22 @@ export default function SendAmountPage() {
       const data = await res.json();
       if (data.success) {
         setFees(data.data);
+      } else {
+        // Fallback calculation if API fails
+        const fallbackFee =
+          Number.parseFloat(amount) > 100
+            ? Number.parseFloat(amount) * 0.01
+            : 2.99;
+        setFees({ transferFee: fallbackFee, totalFee: fallbackFee });
       }
     } catch (error) {
       console.error("[v0] Error calculating fees:", error);
+      // Fallback calculation if API fails
+      const fallbackFee =
+        Number.parseFloat(amount) > 100
+          ? Number.parseFloat(amount) * 0.01
+          : 2.99;
+      setFees({ transferFee: fallbackFee, totalFee: fallbackFee });
     }
   };
 
@@ -162,7 +166,9 @@ export default function SendAmountPage() {
 
   const numericAmount = Number.parseFloat(amount) || 0;
   const currentBalance = walletBalances[currency.toLowerCase()] || 0;
-  const totalAmount = numericAmount + fees.transferFee;
+  const transferFee =
+    fees.transferFee || (numericAmount > 100 ? numericAmount * 0.01 : 2.99);
+  const totalAmount = numericAmount + transferFee;
 
   const bankRate =
     selectedBank && bankExchangeRates[selectedBank] && currency === "USD"
@@ -362,7 +368,7 @@ export default function SendAmountPage() {
                       </span>
                       <span className="font-medium">
                         {getCurrencySymbol(currency)}
-                        {fees.transferFee.toFixed(2)}
+                        {transferFee.toFixed(2)}
                       </span>
                     </div>
 
