@@ -1,0 +1,53 @@
+export const mockInvestments = [
+  {
+    id: "bond-001",
+    name: "Ethiopian Diaspora Bond",
+    category: "Government Bond",
+    issuer: "National Bank of Ethiopia",
+    annualYield: "7.5%",
+    riskLevel: "Low",
+    maturityDate: "2030-12-31",
+    minInvestment: 1000,
+    description:
+      "A secure, government-backed bond designed to empower the diaspora to contribute to national infrastructure projects while earning a competitive, fixed return.",
+    icon: "Landmark",
+  },
+  {
+    id: "real-estate-001",
+    name: "Addis Ababa Real Estate Fund",
+    category: "Real Estate",
+    issuer: "GoozX Capital Partners",
+    annualYield: "12.0%",
+    riskLevel: "Medium",
+    maturityDate: "2028-06-30",
+    minInvestment: 5000,
+    description:
+      "Invest in a diversified portfolio of high-growth residential and commercial properties in Addis Ababa. Aims for capital appreciation and rental income.",
+    icon: "Building2",
+  },
+  {
+    id: "sme-001",
+    name: "Tech Innovators SME Fund",
+    category: "SME Financing",
+    issuer: "Ethio-Impact Ventures",
+    annualYield: "15.0% (Projected)",
+    riskLevel: "High",
+    maturityDate: "2027-09-30",
+    minInvestment: 2500,
+    description:
+      "Provide venture debt to promising Ethiopian tech startups in fintech, agritech, and healthtech. High-risk, high-reward opportunity to fuel innovation.",
+    icon: "Lightbulb",
+  },
+  {
+    id: "agri-001",
+    name: "Green-Path Agriculture Bond",
+    category: "Agriculture",
+    issuer: "Ministry of Agriculture",
+    annualYield: "8.2%",
+    riskLevel: "Low",
+    maturityDate: "2032-03-31",
+    minInvestment: 500,
+    description: "Support sustainable farming and food security initiatives across Ethiopia. A stable, long-term investment with social impact.",
+    icon: "Wheat",
+  },
+];

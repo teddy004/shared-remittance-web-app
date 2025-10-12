@@ -22,7 +22,7 @@ export function MobileNav() {
       </SheetTrigger>
       <SheetContent side="left" className="w-[300px] sm:w-[400px]">
         <div className="p-4">
-          <Link href="/" className="text-2xl font-bold text-primary mb-8 block" onClick={() => setOpen(false)}>
+          <Link href="/" className="text-2xl font-bold text-purple-600 mb-8 block" onClick={() => setOpen(false)}>
             GoozX
           </Link>
           <nav className="flex flex-col gap-4">

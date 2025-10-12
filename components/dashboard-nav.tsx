@@ -47,7 +47,7 @@ export function DashboardNav() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-600 font-bold text-primary-foreground">
               G
             </div>
             <span className="hidden text-xl font-bold sm:inline">GoozX</span>
@@ -94,7 +94,7 @@ export function DashboardNav() {
           <Link href="/dashboard/settings">
             <Avatar className="h-8 w-8 cursor-pointer">
               {user?.avatar && <AvatarImage src={user.avatar} />}
-              <AvatarFallback className="bg-primary text-primary-foreground">
+              <AvatarFallback className="bg-purple-600 text-primary-foreground">
                 {user ? user.name.split(" ").map((n: any[]) => n[0]).join("") : "G"}
               </AvatarFallback>
             </Avatar>

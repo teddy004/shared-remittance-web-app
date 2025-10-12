@@ -20,7 +20,7 @@ export function DashboardNavLink({ href, label, icon: Icon, isMobile = false }: 
   if (isMobile) {
     return (
       <Link href={href} className="flex-1">
-        <Button variant="ghost" size="sm" className={cn("flex-col gap-1 h-auto py-2 w-full", isActive && "text-primary")}>
+        <Button variant="ghost" size="sm" className={cn("flex-col gap-1 h-auto py-2 w-full", isActive && "text-purple-600")}>
           <Icon className="h-5 w-5" />
           <span className="text-xs">{label}</span>
         </Button>
@@ -30,7 +30,7 @@ export function DashboardNavLink({ href, label, icon: Icon, isMobile = false }: 
 
   return (
     <Link href={href}>
-      <Button variant={isActive ? "secondary" : "ghost"} size="sm" className={cn("gap-2", isActive && "bg-primary/10 text-primary")}>
+      <Button variant={isActive ? "secondary" : "ghost"} size="sm" className={cn("gap-2", isActive && "bg-purple-600/10 text-purple-600")}>
         <Icon className="h-4 w-4" />
         {label}
       </Button>

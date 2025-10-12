@@ -954,6 +954,7 @@ export const apiClient = {
       };
 
       storage.moneyRequests.unshift(request);
+      console.log("[v0] New request added to storage:", request);
 
       // In real app, send notification to recipient via email/SMS
       console.log(`[v0] Money request sent to ${data.fromEmail}`);

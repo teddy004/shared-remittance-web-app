@@ -14,7 +14,7 @@ export function LoadingSpinner({ size = "md", text }: LoadingSpinnerProps) {
 
   return (
     <div className="flex flex-col items-center justify-center p-8">
-      <Loader2 className={`${sizeClasses[size]} animate-spin text-primary`} />
+      <Loader2 className={`${sizeClasses[size]} animate-spin text-purple-600`} />
       {text && <p className="mt-4 text-sm text-muted-foreground">{text}</p>}
     </div>
   )

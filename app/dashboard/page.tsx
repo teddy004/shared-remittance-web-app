@@ -95,7 +95,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <Card className="relative overflow-hidden border-purple-100 bg-primary shadow-lg card">
+        <Card className="relative overflow-hidden border-purple-100 bg-purple-600 shadow-lg card">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-white/90">
               USD Balance

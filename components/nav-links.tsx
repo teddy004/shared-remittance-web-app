@@ -33,7 +33,7 @@ export function NavLinks({ isMobile = false, onLinkClick }: NavLinksProps) {
         <Link
           key={href}
           href={href}
-          className={cn("transition-colors", pathname === href ? "text-primary font-semibold" : "hover:text-foreground")}
+          className={cn("transition-colors", pathname === href ? "text-purple-600 font-semibold" : "hover:text-foreground")}
           onClick={onLinkClick}
         >
           {t(labelKey)}

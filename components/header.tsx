@@ -26,7 +26,7 @@ export function Header() {
     <header className="border-b bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
         <div className="flex items-center gap-8">
-          <Link href="/" className="text-2xl font-bold text-primary hover:scale-105 transition-transform">
+          <Link href="/" className="text-2xl font-bold text-purple-600 hover:scale-105 transition-transform">
             GoozX
           </Link>
           <NavLinks />
@@ -48,13 +48,13 @@ export function Header() {
             <Button
               variant="ghost"
               onClick={handleLogout}
-              className="text-text-secondary hover:text-primary font-medium text-base"
+              className="text-text-secondary hover:text-purple-600 font-medium text-base"
             >
               {t("login")}
             </Button>
           ) : (
             <Link href="/login">
-              <Button variant="ghost" className="text-text-secondary hover:text-primary font-medium text-base">
+              <Button variant="ghost" className="text-text-secondary hover:text-purple-600 font-medium text-base">
                 {t("login")}
               </Button>
             </Link>

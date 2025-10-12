@@ -23,7 +23,7 @@ export default function ContactPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6 text-center">
           <div className="mx-auto max-w-3xl space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold text-primary">{t("contactGetInTouch")}</h1>
+            <h1 className="text-5xl md:text-6xl font-bold text-purple-600">{t("contactGetInTouch")}</h1>
             <p className="text-xl text-gray-600 leading-relaxed">
               {t("contactDescription")}
             </p>
@@ -38,27 +38,27 @@ export default function ContactPage() {
           <div className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto">
             <Card className="border-purple-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 card">
               <CardHeader>
-                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <Mail className="w-8 h-8 text-white" />
                 </div>
                 <CardTitle className="text-2xl text-center">{t("contactEmailSupport")}</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-gray-600 mb-4">{t("contactEmailDescription")}</p>
-                <p className="text-lg font-semibold text-primary">support@goozx.com</p>
+                <p className="text-lg font-semibold text-purple-600">support@goozx.com</p>
               </CardContent>
             </Card>
 
             <Card className="border-purple-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 card">
               <CardHeader>
-                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <Phone className="w-8 h-8 text-white" />
                 </div>
                 <CardTitle className="text-2xl text-center">{t("contactPhoneSupport")}</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-gray-600 mb-4">{t("contactPhoneDescription")}</p>
-                <p className="text-lg font-semibold text-primary">+251 11 123 4567</p>
+                <p className="text-lg font-semibold text-purple-600">+251 11 123 4567</p>
                 <p className="text-sm text-gray-500 mt-2">{t("contactPhoneOffice")}</p>
               </CardContent>
             </Card>
@@ -83,7 +83,7 @@ export default function ContactPage() {
               {t("contactHaveQuestions")}{" "}
               <a
                 href="/faq"
-                className="text-primary hover:text-accent font-semibold ml-1 underline decoration-2 underline-offset-4"
+                className="text-purple-600 hover:text-accent font-semibold ml-1 underline decoration-2 underline-offset-4"
               >
                 {t("contactFaqLink")}
               </a>
@@ -97,7 +97,7 @@ export default function ContactPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6 max-w-4xl">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">{t("contactSendMessageTitle")}</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-purple-600 mb-4">{t("contactSendMessageTitle")}</h2>
             <p className="text-xl text-gray-600">{t("contactSendMessageDescription")}</p>
           </div>
 
@@ -147,10 +147,10 @@ export default function ContactPage() {
         <div className="container mx-auto px-6">
           <div className="grid gap-12 lg:grid-cols-2 max-w-6xl mx-auto">
             <div>
-              <h2 className="text-4xl font-bold text-primary mb-6">{t("contactVisitOffice")}</h2>
+              <h2 className="text-4xl font-bold text-purple-600 mb-6">{t("contactVisitOffice")}</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-4 bg-white p-6 rounded-2xl shadow-lg border border-purple-100 card">
-                  <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
                     <MapPin className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -165,26 +165,26 @@ export default function ContactPage() {
             </div>
 
             <div>
-              <h2 className="text-4xl font-bold text-primary mb-6">{t("contactFollowUs")}</h2>
+              <h2 className="text-4xl font-bold text-purple-600 mb-6">{t("contactFollowUs")}</h2>
               <p className="text-gray-600 mb-6 text-lg">
                 {t("contactFollowUsDescription")}
               </p>
               <div className="flex gap-4">
                 <a
                   href="#"
-                  className="w-14 h-14 bg-primary hover:bg-accent text-white rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
+                  className="w-14 h-14 bg-purple-600 hover:bg-accent text-white rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
                 >
                   <Twitter className="w-6 h-6" />
                 </a>
                 <a
                   href="#"
-                  className="w-14 h-14 bg-primary hover:bg-accent text-white rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
+                  className="w-14 h-14 bg-purple-600 hover:bg-accent text-white rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
                 >
                   <Facebook className="w-6 h-6" />
                 </a>
                 <a
                   href="#"
-                  className="w-14 h-14 bg-primary hover:bg-accent text-white rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
+                  className="w-14 h-14 bg-purple-600 hover:bg-accent text-white rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
                 >
                   <Linkedin className="w-6 h-6" />
                 </a>

@@ -17,7 +17,7 @@ export function FooterLinkGroup({ title, links }: FooterLinkGroupProps) {
       <ul className="space-y-2 text-sm">
         {links.map((link) => (
           <li key={link.href}>
-            <Link href={link.href} className="text-muted-foreground hover:text-primary transition-colors">
+            <Link href={link.href} className="text-muted-foreground hover:text-purple-600 transition-colors">
               {link.label}
             </Link>
           </li>

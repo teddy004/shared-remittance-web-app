@@ -100,6 +100,9 @@ export default function ServicesPage() {
               needs. Drive efficiency, innovation, and growth with our
               comprehensive suite of services.
             </p>
+            <h1 className="text-5xl font-bold tracking-tight text-purple-700 sm:text-6xl">
+              FEATURES
+            </h1>
           </div>
         </div>
       </section>
