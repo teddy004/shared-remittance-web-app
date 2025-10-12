@@ -30,14 +30,20 @@ export interface OTPRequest {
   code: string;
 }
 
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  phone?: string;
+  country?: string;
+  nationality?: string;
+  dateOfBirth?: string;
+  kycStatus: "pending" | "in_review" | "approved" | "rejected";
+  avatar?: string;
+}
+
 export interface AuthResponse {
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    kycStatus: string;
-    avatar?: string;
-  };
+  user: User;
   token: string;
   refreshToken: string;
   expiresIn: number;

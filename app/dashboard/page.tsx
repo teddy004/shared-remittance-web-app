@@ -232,7 +232,13 @@ export default function DashboardPage() {
             Here's what's happening with your account today
           </p>
         </div>
-        <StatusBadge status="verified" />
+        <div className="flex items-center gap-4">
+          <StatusBadge status="verified" />
+          <div className="text-right">
+            <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+            <p className="text-xs text-gray-500">{user?.email}</p>
+          </div>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">

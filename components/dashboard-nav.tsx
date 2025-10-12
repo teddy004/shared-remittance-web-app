@@ -1,6 +1,7 @@
-"use client"
+"use client";
 
-import Link from "next/link"
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,38 +9,51 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { LanguageSelector } from "@/components/language-selector"
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { LanguageSelector } from "@/components/language-selector";
 import {
   Bell,
   Gift,
   HelpCircle,
   Home,
+  LogOut,
   MoreHorizontal,
   Repeat2,
   Send,
   Settings,
   TrendingUp,
-} from "lucide-react"
-import { useAuth } from "@/lib/auth-context"
-import { useTranslation } from "@/lib/use-translation"
-import { DashboardNavLink } from "./dashboard-nav-link"
+} from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { useTranslation } from "@/lib/use-translation";
+import { DashboardNavLink } from "./dashboard-nav-link";
 
 export function DashboardNav() {
-  const { user } = useAuth()
-  const { t } = useTranslation()
+  const { user } = useAuth();
+  const { t } = useTranslation();
 
   const dashboardNavItems = [
     { href: "/dashboard", labelKey: "dashboard" as const, icon: Home },
     { href: "/dashboard/send", labelKey: "send" as const, icon: Send },
-    { href: "/dashboard/transactions", labelKey: "transactions" as const, icon: Repeat2 },
+    {
+      href: "/dashboard/transactions",
+      labelKey: "transactions" as const,
+      icon: Repeat2,
+    },
     { href: "/dashboard/gifts", labelKey: "gifts" as const, icon: Gift },
-    { href: "/dashboard/investments", labelKey: "investments" as const, icon: TrendingUp },
-    { href: "/dashboard/settings", labelKey: "settings" as const, icon: Settings },
+    {
+      href: "/dashboard/investments",
+      labelKey: "investments" as const,
+      icon: TrendingUp,
+    },
+    {
+      href: "/dashboard/settings",
+      labelKey: "settings" as const,
+      icon: Settings,
+    },
     { href: "/help", labelKey: "help" as const, icon: HelpCircle },
-  ]
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -95,7 +109,12 @@ export function DashboardNav() {
             <Avatar className="h-8 w-8 cursor-pointer">
               {user?.avatar && <AvatarImage src={user.avatar} />}
               <AvatarFallback className="bg-purple-600 text-primary-foreground">
-                {user ? user.name.split(" ").map((n: any[]) => n[0]).join("") : "G"}
+                {user
+                  ? user.name
+                      .split(" ")
+                      .map((n: string) => n[0])
+                      .join("")
+                  : "G"}
               </AvatarFallback>
             </Avatar>
           </Link>
@@ -115,5 +134,5 @@ export function DashboardNav() {
         ))}
       </nav>
     </header>
-  )
+  );
 }
