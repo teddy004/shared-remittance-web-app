@@ -1,22 +1,41 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowRight, Info } from "@/lib/icons"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ArrowRight, Info } from "@/lib/icons";
 
-const purposeOptions = ["Personal Loan", "Rent Payment", "Shared Expenses", "Gift", "Service Payment", "Other"]
+const purposeOptions = [
+  "Personal Loan",
+  "Rent Payment",
+  "Shared Expenses",
+  "Gift",
+  "Service Payment",
+  "Other",
+];
 
 export default function CreateRequestPage() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fromName: "",
     fromEmail: "",
@@ -25,11 +44,11 @@ export default function CreateRequestPage() {
     purpose: "",
     description: "",
     dueDate: "",
-  })
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await fetch("/api/requests", {
@@ -44,37 +63,63 @@ export default function CreateRequestPage() {
           description: formData.description,
           dueDate: formData.dueDate,
         }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
+      console.log("[v0] API Response:", data);
 
       if (data.success) {
-        router.push(`/dashboard/request/share?requestId=${data.data.id}`)
+        const requestData = data.data;
+        console.log("[v0] Request created successfully:", requestData);
+
+        // Navigate to share page with request data
+        const params = new URLSearchParams({
+          requestId: requestData.id,
+          amount: String(requestData.amount),
+          purpose: requestData.purpose,
+          fromName: requestData.fromName,
+          status: requestData.status,
+        });
+
+        router.push(`/dashboard/request/share?${params.toString()}`);
       } else {
-        alert(data.error || "Failed to create request")
+        console.error("[v0] Request creation failed:", data);
+        const errorMessage =
+          (typeof data.error === "object" ? data.error?.message : data.error) ||
+          "Failed to create request";
+        alert(`Error: ${errorMessage}`);
       }
     } catch (error) {
-      console.error("[v0] Error creating request:", error)
-      alert("An error occurred. Please try again.")
+      console.error("[v0] Error creating request:", error);
+      alert("An error occurred. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const isFormValid = formData.fromName && formData.fromEmail && formData.amount && formData.purpose && formData.dueDate
+  const isFormValid =
+    formData.fromName &&
+    formData.fromEmail &&
+    formData.amount &&
+    formData.purpose &&
+    formData.dueDate;
 
   return (
     <div className="container mx-auto space-y-6 p-4 pb-20 md:pb-6">
       <div>
         <h1 className="text-2xl font-bold">Create Payment Request</h1>
-        <p className="text-muted-foreground">Request money from anyone via email or link</p>
+        <p className="text-muted-foreground">
+          Request money from anyone via email or link
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
           <CardHeader>
             <CardTitle>Who should pay you?</CardTitle>
-            <CardDescription>Enter the payer's contact information</CardDescription>
+            <CardDescription>
+              Enter the payer's contact information
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -83,7 +128,9 @@ export default function CreateRequestPage() {
                 id="fromName"
                 placeholder="John Doe"
                 value={formData.fromName}
-                onChange={(e) => setFormData({ ...formData, fromName: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, fromName: e.target.value })
+                }
                 className="h-12"
                 required
               />
@@ -97,7 +144,9 @@ export default function CreateRequestPage() {
                   type="email"
                   placeholder="john@example.com"
                   value={formData.fromEmail}
-                  onChange={(e) => setFormData({ ...formData, fromEmail: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fromEmail: e.target.value })
+                  }
                   className="h-12"
                   required
                 />
@@ -110,7 +159,9 @@ export default function CreateRequestPage() {
                   type="tel"
                   placeholder="+1-555-0123"
                   value={formData.fromPhone}
-                  onChange={(e) => setFormData({ ...formData, fromPhone: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fromPhone: e.target.value })
+                  }
                   className="h-12"
                 />
               </div>
@@ -135,7 +186,9 @@ export default function CreateRequestPage() {
                   type="number"
                   placeholder="0.00"
                   value={formData.amount}
-                  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, amount: e.target.value })
+                  }
                   className="h-12 pl-8 text-lg font-semibold"
                   min="0"
                   step="0.01"
@@ -146,7 +199,12 @@ export default function CreateRequestPage() {
 
             <div className="space-y-2">
               <Label htmlFor="purpose">Purpose *</Label>
-              <Select value={formData.purpose} onValueChange={(value) => setFormData({ ...formData, purpose: value })}>
+              <Select
+                value={formData.purpose}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, purpose: value })
+                }
+              >
                 <SelectTrigger id="purpose" className="h-12">
                   <SelectValue placeholder="Select purpose" />
                 </SelectTrigger>
@@ -166,11 +224,15 @@ export default function CreateRequestPage() {
                 id="description"
                 placeholder="Add any additional details about this request..."
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 className="min-h-[100px] resize-none"
                 maxLength={200}
               />
-              <p className="text-xs text-muted-foreground">{formData.description.length}/200 characters</p>
+              <p className="text-xs text-muted-foreground">
+                {formData.description.length}/200 characters
+              </p>
             </div>
 
             <div className="space-y-2">
@@ -179,7 +241,9 @@ export default function CreateRequestPage() {
                 id="dueDate"
                 type="date"
                 value={formData.dueDate}
-                onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, dueDate: e.target.value })
+                }
                 className="h-12"
                 min={new Date().toISOString().split("T")[0]}
                 required
@@ -194,17 +258,23 @@ export default function CreateRequestPage() {
             <div className="space-y-1">
               <p className="text-sm font-medium">How it works</p>
               <p className="text-xs text-muted-foreground">
-                We'll send a payment request to the email address you provided. They can pay directly through the link,
-                and you'll be notified when the payment is complete.
+                We'll send a payment request to the email address you provided.
+                They can pay directly through the link, and you'll be notified
+                when the payment is complete.
               </p>
             </div>
           </CardContent>
         </Card>
 
-        <Button type="submit" disabled={!isFormValid || loading} className="h-12 w-full gap-2">
-          {loading ? "Creating..." : "Create Request"} <ArrowRight className="h-4 w-4" />
+        <Button
+          type="submit"
+          disabled={!isFormValid || loading}
+          className="h-12 w-full gap-2"
+        >
+          {loading ? "Creating..." : "Create Request"}{" "}
+          <ArrowRight className="h-4 w-4" />
         </Button>
       </form>
     </div>
-  )
+  );
 }

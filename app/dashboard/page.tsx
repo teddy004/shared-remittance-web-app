@@ -253,32 +253,64 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle>Recent Transactions</CardTitle>
-            <CardDescription>
-              Your latest money transfers and payments
-            </CardDescription>
-          </div>
-          <Link href="/dashboard/transactions">
-            <Button variant="ghost" size="sm" className="gap-2">
-              View All <ArrowUpRight className="h-4 w-4" />
-            </Button>
-          </Link>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {transactions.length > 0 ? (
-            transactions.map((transaction: any) => (
-              <TransactionRow key={transaction.id} transaction={transaction} />
-            ))
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              No transactions yet
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Recent Transactions</CardTitle>
+              <CardDescription>
+                Your latest money transfers and payments
+              </CardDescription>
             </div>
-          )}
-        </CardContent>
-      </Card>
+            <Link href="/dashboard/transactions">
+              <Button variant="ghost" size="sm" className="gap-2">
+                View All <ArrowUpRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {transactions.length > 0 ? (
+              transactions.map((transaction: any) => (
+                <TransactionRow
+                  key={transaction.id}
+                  transaction={transaction}
+                />
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No transactions yet
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Recent Requests</CardTitle>
+              <CardDescription>
+                Your latest money requests and responses
+              </CardDescription>
+            </div>
+            <Link href="/dashboard/request">
+              <Button variant="ghost" size="sm" className="gap-2">
+                View All <ArrowUpRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="text-center py-8 text-gray-500">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-purple-100 mx-auto mb-3">
+                <Download className="h-8 w-8 text-purple-600" />
+              </div>
+              <p className="text-sm">Click "View All" to see your requests</p>
+              <p className="text-xs text-gray-400 mt-1">
+                or use the "Request Money" button above
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       <Card className="border-purple-200 bg-gradient-to-r from-purple-50 to-blue-50 shadow-md">
         <CardContent className="flex items-center justify-between p-6">
