@@ -23,8 +23,14 @@ import {
   Plus,
   Sparkles,
   DollarSign,
+  ArrowRight,
 } from "@/lib/icons";
 import { useAuth } from "@/lib/auth-context";
+import {
+  fetchAllExchangeRates,
+  currencyInfo,
+  type Currency,
+} from "@/lib/exchange-rates";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -32,6 +38,17 @@ export default function DashboardPage() {
   const [transactions, setTransactions] = useState([]);
   const [exchangeRate, setExchangeRate] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  // Currency converter state
+  const [converterAmount, setConverterAmount] = useState<string>("");
+  const [selectedBank, setSelectedBank] = useState<string>("");
+  const [converterFromCurrency, setConverterFromCurrency] =
+    useState<Currency>("USD");
+  const [convertedAmount, setConvertedAmount] = useState<number | null>(null);
+  const [rates, setRates] = useState<any[]>([]);
+  const [allRates, setAllRates] = useState<Record<Currency, number> | null>(
+    null
+  );
 
   useEffect(() => {
     loadDashboardData();
@@ -57,6 +74,13 @@ export default function DashboardPage() {
       if (rateData.success) {
         setExchangeRate(rateData.data.rate);
       }
+
+      // Load exchange rates for converter
+      const allRatesData = await fetchAllExchangeRates();
+      setAllRates(allRatesData);
+
+      // Load bank rates for converter
+      await loadBankRates("USD");
     } catch (error) {
       console.error("[v0] Error loading dashboard data:", error);
     } finally {
@@ -64,10 +88,127 @@ export default function DashboardPage() {
     }
   };
 
+  const loadBankRates = async (currency: Currency) => {
+    let baseRate: number;
+    if (!allRates) {
+      const rates = await fetchAllExchangeRates();
+      setAllRates(rates);
+      baseRate = rates[currency];
+    } else {
+      baseRate = allRates[currency];
+    }
+
+    const bankRates = [
+      {
+        id: "cbe",
+        name: "Commercial Bank of Ethiopia",
+        buyRate: baseRate - 0.5,
+        sellRate: baseRate + 0.5,
+        spread: 1.0,
+        lastUpdated: new Date().toISOString(),
+        isOpen: true,
+      },
+      {
+        id: "dashen",
+        name: "Dashen Bank",
+        buyRate: baseRate - 0.3,
+        sellRate: baseRate + 0.7,
+        spread: 1.0,
+        lastUpdated: new Date().toISOString(),
+        isOpen: true,
+      },
+      {
+        id: "awash",
+        name: "Awash Bank",
+        buyRate: baseRate - 0.4,
+        sellRate: baseRate + 0.6,
+        spread: 1.0,
+        lastUpdated: new Date().toISOString(),
+        isOpen: true,
+      },
+      {
+        id: "boa",
+        name: "Bank of Abyssinia",
+        buyRate: baseRate - 0.6,
+        sellRate: baseRate + 0.4,
+        spread: 1.0,
+        lastUpdated: new Date().toISOString(),
+        isOpen: true,
+      },
+      {
+        id: "wegagen",
+        name: "Wegagen Bank",
+        buyRate: baseRate - 0.45,
+        sellRate: baseRate + 0.55,
+        spread: 1.0,
+        lastUpdated: new Date().toISOString(),
+        isOpen: true,
+      },
+      {
+        id: "nib",
+        name: "Nib International Bank",
+        buyRate: baseRate - 0.35,
+        sellRate: baseRate + 0.65,
+        spread: 1.0,
+        lastUpdated: new Date().toISOString(),
+        isOpen: true,
+      },
+      {
+        id: "coop",
+        name: "Cooperative Bank of Oromia",
+        buyRate: baseRate - 0.55,
+        sellRate: baseRate + 0.45,
+        spread: 1.0,
+        lastUpdated: new Date().toISOString(),
+        isOpen: true,
+      },
+      {
+        id: "united",
+        name: "United Bank",
+        buyRate: baseRate - 0.4,
+        sellRate: baseRate + 0.6,
+        spread: 1.0,
+        lastUpdated: new Date().toISOString(),
+        isOpen: true,
+      },
+    ];
+
+    setRates(bankRates);
+  };
+
   const handleRefresh = () => {
     setLoading(true);
     loadDashboardData();
   };
+
+  // Currency converter logic
+  useEffect(() => {
+    if (converterAmount && selectedBank && allRates) {
+      const amount = parseFloat(converterAmount);
+      if (!isNaN(amount) && amount > 0) {
+        const selectedBankData = rates.find((bank) => bank.id === selectedBank);
+        if (selectedBankData) {
+          // Using sell rate for conversion (ETB to foreign currency)
+          const converted = amount * selectedBankData.sellRate;
+          setConvertedAmount(converted);
+        }
+      } else {
+        setConvertedAmount(null);
+      }
+    } else {
+      setConvertedAmount(null);
+    }
+  }, [converterAmount, selectedBank, allRates, rates]);
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow numbers and decimal point
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setConverterAmount(value);
+    }
+  };
+
+  const currencies: Currency[] = ["USD", "EUR", "GBP", "SAR", "AED"];
 
   if (loading) {
     return (
@@ -127,10 +268,12 @@ export default function DashboardPage() {
           <div className="absolute -bottom-8 -right-4 h-24 w-24 rounded-full bg-white/10" />
         </Card>
 
-        <Card className="relative overflow-hidden border-purple-100 bg-white shadow-lg">
+        {/* Currency Calculator */}
+        <Card className="relative overflow-hidden border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-blue-50 shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">
-              ETB Balance
+            <CardTitle className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <DollarSign className="h-4 w-4 text-purple-600" />
+              Currency Calculator
             </CardTitle>
             <Button
               size="icon"
@@ -142,17 +285,107 @@ export default function DashboardPage() {
             </Button>
           </CardHeader>
           <CardContent>
-            <div className="space-y-1">
-              <div className="text-5xl font-bold text-gray-900">
-                {walletBalance.etb.toLocaleString()} Br
+            <div className="space-y-4">
+              <div className="grid gap-3 md:grid-cols-3">
+                {/* Foreign Currency Selection */}
+                <div className="space-y-2">
+                  <label className="text-xs font-medium text-gray-600">
+                    Foreign Currency
+                  </label>
+                  <select
+                    value={converterFromCurrency}
+                    onChange={(e) =>
+                      setConverterFromCurrency(e.target.value as Currency)
+                    }
+                    className="w-full rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  >
+                    {currencies.map((currency) => (
+                      <option key={currency} value={currency}>
+                        {currencyInfo[currency].flag} {currency}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Amount Input */}
+                <div className="space-y-2">
+                  <label className="text-xs font-medium text-gray-600">
+                    Amount ({converterFromCurrency})
+                  </label>
+                  <input
+                    type="text"
+                    value={converterAmount}
+                    onChange={handleAmountChange}
+                    placeholder="Enter amount"
+                    className="w-full rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  />
+                </div>
+
+                {/* Ethiopian Bank Selection */}
+                <div className="space-y-2">
+                  <label className="text-xs font-medium text-gray-600">
+                    Ethiopian Bank
+                  </label>
+                  <select
+                    value={selectedBank}
+                    onChange={(e) => setSelectedBank(e.target.value)}
+                    className="w-full rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  >
+                    <option value="">Select Bank</option>
+                    {rates.map((bank) => (
+                      <option key={bank.id} value={bank.id}>
+                        {bank.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <p className="text-sm text-gray-600">
-                1 USD = {exchangeRate.toFixed(2)} ETB
-              </p>
+
+              {/* Conversion Result */}
+              <div className="flex items-center gap-2">
+                <div className="flex-1 rounded-md border border-gray-300 bg-white px-3 py-2">
+                  {convertedAmount ? (
+                    <span className="font-semibold text-green-600">
+                      {convertedAmount.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      ETB
+                    </span>
+                  ) : (
+                    <span className="text-gray-400 text-sm">
+                      Enter amount & select bank
+                    </span>
+                  )}
+                </div>
+                <ArrowRight className="h-4 w-4 text-gray-400" />
+              </div>
+
+              {convertedAmount && selectedBank && (
+                <div className="rounded-md bg-white p-2 text-xs text-gray-600">
+                  <div className="flex items-center justify-between">
+                    <span>
+                      Rate: 1 {converterFromCurrency} ={" "}
+                      {rates
+                        .find((b) => b.id === selectedBank)
+                        ?.sellRate.toFixed(2)}{" "}
+                      ETB
+                    </span>
+                    <span className="font-medium">
+                      Total:{" "}
+                      {convertedAmount.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      ETB
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
-          <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-purple-50" />
-          <div className="absolute -bottom-8 -right-4 h-24 w-24 rounded-full bg-purple-50" />
+          <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-purple-100/50" />
+          <div className="absolute -bottom-8 -right-4 h-24 w-24 rounded-full bg-blue-100/50" />
         </Card>
       </div>
 
