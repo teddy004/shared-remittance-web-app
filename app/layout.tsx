@@ -1,9 +1,8 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import AppContent from "./client-layout" // Assuming you haven't renamed the file yet
-import { AuthProvider } from "@/lib/auth-context"
-import { LanguageProvider } from "@/lib/language-context"
+import { Providers } from "./providers"
+import AppContent from "./client-layout"
 
 export const metadata: Metadata = {
   title: "GoozX - Empowering Cross-Border Connections Through Innovation",
@@ -24,11 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="font-sans antialiased flex flex-col min-h-screen">
-        <AuthProvider>
-          <LanguageProvider>
-            <AppContent>{children}</AppContent>
-          </LanguageProvider>
-        </AuthProvider>
+        <Providers>
+          <AppContent>{children}</AppContent>
+        </Providers>
       </body>
     </html>
   )
