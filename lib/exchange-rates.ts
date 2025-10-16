@@ -72,7 +72,7 @@ export const getBankExchangeRates = async (): Promise<
       bankRates[bank].usdToEtb = updatedBase + variation;
       bankRates[bank].lastUpdate = new Date();
     });
-  } catch (error) {
+  } catch {
     console.log(
       "[v0] Using cached rates for banks:",
       Object.values(bankRates).map((b) => `${b.name}: ${b.usdToEtb.toFixed(2)}`)

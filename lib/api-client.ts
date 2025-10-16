@@ -1,7 +1,6 @@
 import {
   mockUser,
   mockRecipients,
-  mockTransactions,
   mockWalletBalances,
   mockRequests,
   mockServiceProviders,
@@ -16,7 +15,6 @@ import type {
   LoginRequest,
   RegisterRequest,
   OTPRequest,
-  WalletBalanceResponse,
   TopUpRequest,
   CreateTransactionRequest,
   TransactionResponse,
@@ -24,7 +22,6 @@ import type {
   CreateRecipientRequest,
   RecipientResponse,
   CreateMoneyRequestRequest,
-  MoneyRequestResponse,
   KYCSubmissionRequest,
   KYCStatusResponse,
 } from "./api-types";
@@ -50,7 +47,7 @@ const generateReferenceNumber = () => {
 const storage = {
   users: [mockUser],
   recipients: [...mockRecipients],
-  transactions: [...mockTransactions],
+  transactions: [...mockTransactions] as any[],
   walletBalances: { ...mockWalletBalances },
   moneyRequests: [...mockRequests],
   sessions: new Map<string, { userId: string; expiresAt: number }>(),
@@ -82,7 +79,7 @@ function createResponse<T>(data: T, success = true): ApiResponse<T> {
 function createErrorResponse(
   code: string,
   message: string,
-  details?: any
+  details?: unknown
 ): ApiResponse {
   return {
     success: false,
@@ -294,7 +291,7 @@ export const apiClient = {
 
     async verifyOTP(
       data: OTPRequest
-    ): Promise<ApiResponse<{ verified: boolean; token?: string; user?: any }>> {
+    ): Promise<ApiResponse<{ verified: boolean; token?: string; user?: unknown }>> {
       await delay(300);
 
       clearExpiredOTPs();
@@ -355,7 +352,6 @@ export const apiClient = {
     async changePassword(
       token: string,
       currentPassword: string,
-      newPassword: string
     ): Promise<ApiResponse<{ message: string }>> {
       await delay(500);
 
@@ -428,9 +424,7 @@ export const apiClient = {
 
   // Wallet APIs (demo - no auth required)
   wallet: {
-    async getBalance(
-      token?: string
-    ): Promise<ApiResponse<WalletBalanceResponse>> {
+    async getBalance(): Promise<ApiResponse<any>> {
       await delay(300);
 
       // Demo mode - no auth validation required
@@ -444,7 +438,7 @@ export const apiClient = {
     async topUp(
       token: string,
       data: TopUpRequest
-    ): Promise<ApiResponse<WalletBalanceResponse>> {
+    ): Promise<ApiResponse<any>> {
       await delay(1200); // Simulate payment processing
 
       const session = storage.sessions.get(token);
@@ -496,7 +490,7 @@ export const apiClient = {
     async getAll(
       token: string,
       filters?: { status?: string; type?: string; limit?: number }
-    ): Promise<ApiResponse<typeof mockTransactions>> {
+    ): Promise<ApiResponse<any[]>> {
       await delay(400);
 
       const session = storage.sessions.get(token);
@@ -523,7 +517,7 @@ export const apiClient = {
     async getById(
       token: string,
       id: string
-    ): Promise<ApiResponse<(typeof mockTransactions)[0]>> {
+    ): Promise<ApiResponse<any>> {
       await delay(300);
 
       const session = storage.sessions.get(token);
@@ -699,7 +693,7 @@ export const apiClient = {
 
   // Recipient APIs (demo - no auth required)
   recipients: {
-    async getAll(token?: string): Promise<ApiResponse<typeof mockRecipients>> {
+    async getAll(): Promise<ApiResponse<typeof mockRecipients>> {
       await delay(300);
 
       // Demo mode - no auth validation required
@@ -709,7 +703,7 @@ export const apiClient = {
     async getById(
       token: string | undefined,
       id: string
-    ): Promise<ApiResponse<(typeof mockRecipients)[0]>> {
+    ): Promise<ApiResponse<any>> {
       await delay(200);
 
       // Demo mode - no auth validation required
@@ -1229,7 +1223,6 @@ export const apiClient = {
     async confirm(
       token: string | undefined,
       transactionId: string,
-      otp?: string
     ): Promise<ApiResponse<TransactionResponse>> {
       await delay(1000);
 
@@ -1391,8 +1384,6 @@ export const apiClient = {
 
     async uploadDocument(
       token: string,
-      documentType: string,
-      file: string
     ): Promise<ApiResponse<{ documentId: string; url: string }>> {
       await delay(800);
 
@@ -1443,9 +1434,6 @@ export const apiClient = {
   compliance: {
     async checkSanctions(
       token: string,
-      name: string,
-      dateOfBirth: string,
-      nationality: string
     ): Promise<ApiResponse<{ clear: boolean; matches?: any[] }>> {
       await delay(600);
 
@@ -1764,7 +1752,7 @@ export const apiClient = {
 
     async getBillPayments(token: string): Promise<ApiResponse<any[]>> {
       await delay(400);
-
+      
       const session = storage.sessions.get(token);
       if (!session || session.expiresAt < Date.now()) {
         return createErrorResponse("AUTH_006", "Invalid or expired session");
@@ -2535,7 +2523,6 @@ export const apiClient = {
     async verifyMicroDeposits(
       token: string,
       accountId: string,
-      amounts: [number, number]
     ): Promise<ApiResponse<{ verified: boolean }>> {
       await delay(800);
 

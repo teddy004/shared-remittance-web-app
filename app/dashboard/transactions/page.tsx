@@ -8,11 +8,20 @@ import { TransactionRow } from "@/components/transaction-row"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Filter } from "@/lib/icons"
 
+interface Transaction {
+  id: string
+  recipientName: string
+  type: "sent" | "received" | "request"
+  status: "completed" | "pending" | "failed"
+  amount: number
+  date: string
+}
+
 export default function TransactionsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [filterType, setFilterType] = useState("all")
   const [filterStatus, setFilterStatus] = useState("all")
-  const [transactions, setTransactions] = useState([])
+  const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -33,7 +42,7 @@ export default function TransactionsPage() {
     }
   }
 
-  const filteredTransactions = transactions.filter((transaction: any) => {
+  const filteredTransactions = transactions.filter((transaction: Transaction) => {
     const matchesSearch = transaction.recipientName?.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesType = filterType === "all" || transaction.type === filterType
     const matchesStatus = filterStatus === "all" || transaction.status === filterStatus
@@ -137,7 +146,7 @@ export default function TransactionsPage() {
         </CardHeader>
         <CardContent className="space-y-2">
           {filteredTransactions.length > 0 ? (
-            filteredTransactions.map((transaction: any) => (
+            filteredTransactions.map((transaction) => (
               <TransactionRow key={transaction.id} transaction={transaction} />
             ))
           ) : (

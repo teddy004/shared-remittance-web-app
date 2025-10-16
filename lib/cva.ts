@@ -14,7 +14,7 @@ type Config<T extends ConfigSchema> = {
   compoundVariants?: Array<ConfigVariants<T> & { class: ClassValue }>
 }
 
-export type VariantProps<Component extends (...args: any) => any> = Omit<
+export type VariantProps<Component extends (...args: unknown[]) => unknown> = Omit<
   Parameters<Component>[0],
   "class" | "className"
 >

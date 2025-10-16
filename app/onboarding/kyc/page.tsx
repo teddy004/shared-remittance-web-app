@@ -92,7 +92,7 @@ export default function KYCPage() {
                 <SelectContent>
                   <SelectItem value="passport">Passport</SelectItem>
                   <SelectItem value="drivers_license">
-                    Driver's License
+                    Driver&apos;s License
                   </SelectItem>
                   <SelectItem value="national_id">National ID Card</SelectItem>
                 </SelectContent>

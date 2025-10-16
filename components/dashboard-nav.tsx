@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +17,6 @@ import {
   Gift,
   HelpCircle,
   Home,
-  LogOut,
   MoreHorizontal,
   Repeat2,
   Send,

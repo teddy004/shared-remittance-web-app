@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from "@/lib/icons"
 import { SocialLink } from "@/components/social-link"
 import { FooterLinkGroup } from "@/components/footer-link-group" 

@@ -45,7 +45,7 @@ export default function VerificationSuccessPage() {
               <CheckCircle2 className="h-24 w-24 text-success" />
             </div>
             <div className="text-center">
-              <p className="text-lg font-medium">You're Verified!</p>
+              <p className="text-lg font-medium">You&apos;re Verified!</p>
               <p className="mt-2 text-sm text-muted-foreground">
                 You can now send money, pay bills, and access all GoozX features
               </p>

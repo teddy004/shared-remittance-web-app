@@ -1,10 +1,10 @@
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: {
     code: string;
     message: string;
-    details?: any;
+    details?: unknown;
   };
   meta?: {
     timestamp: string;
@@ -126,7 +126,7 @@ export interface TopUpRequest {
   amount: number;
   currency: "USD";
   paymentMethod: "card" | "bank_transfer" | "paypal";
-  paymentDetails?: any;
+  paymentDetails?: unknown;
 }
 
 // FX Rate Types

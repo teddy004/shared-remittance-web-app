@@ -6,7 +6,14 @@ import { ArrowUpRight, ArrowDownLeft } from "@/lib/icons"
 import { cn } from "@/lib/utils"
 
 interface TransactionRowProps {
-  transaction: any
+  transaction: {
+    id: string;
+    recipientName: string;
+    type: "sent" | "received" | "request";
+    status: "completed" | "pending" | "failed";
+    amount: number;
+    date: string;
+  }
   onClick?: () => void
 }
 

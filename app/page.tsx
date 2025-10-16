@@ -6,11 +6,11 @@ import {
   DollarSign,
   CheckCircle,
   Globe,
-  TrendingDown,
   ArrowRight,
 } from "@/lib/icons";
 import { Award, Clock, Users } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const features = [
   {
@@ -96,10 +96,12 @@ export default function HomePage() {
             </div>
 
             <div className="relative">
-              <img
+              <Image
                 src="/happy-young-couple-smiling-looking-at-iphone-toget.jpg"
                 alt="Couple using mobile banking"
                 className="rounded-2xl shadow-2xl"
+                width={500}
+                height={500}
               />
             </div>
           </div>
@@ -136,11 +138,13 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <div className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
-              <div className="aspect-video overflow-hidden">
-                <img
+              <div className="aspect-video overflow-hidden relative">
+                <Image
                   src="/professional-woman-using-smartphone-for-secure-ban.jpg"
                   alt="Bank-level security"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  layout="fill"
+                  objectFit="cover"
+                  className="group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
               <div className="p-6 space-y-4">
@@ -160,11 +164,13 @@ export default function HomePage() {
             </div>
 
             <div className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
-              <div className="aspect-video overflow-hidden">
-                <img
+              <div className="aspect-video overflow-hidden relative">
+                <Image
                   src="/young-man-smiling-holding-iphone-showing-instant-m.jpg"
                   alt="Lightning-fast transfers"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  layout="fill"
+                  objectFit="cover"
+                  className="group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
               <div className="p-6 space-y-4">
@@ -184,11 +190,13 @@ export default function HomePage() {
             </div>
 
             <div className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
-              <div className="aspect-video overflow-hidden">
-                <img
+              <div className="aspect-video overflow-hidden relative">
+                <Image
                   src="/diverse-group-of-people-comparing-exchange-rates-o.jpg"
                   alt="Competitive exchange rates"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  layout="fill"
+                  objectFit="cover"
+                  className="group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
               <div className="p-6 space-y-4">
