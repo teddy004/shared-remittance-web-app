@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: |
           if [ "${{ matrix.package-manager }}" = "npm" ]; then
-            npm ci
+            npm install
           else
             pnpm install --frozen-lockfile
           fi
