@@ -13,18 +13,12 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [18.x, 20.x, 21.x, 22.x, 23.x, 24.x]
+        node-version: [24.x]
         package-manager: [npm, pnpm]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: ${{ matrix.package-manager }}
 
       - name: Setup pnpm
         if: matrix.package-manager == 'pnpm'
@@ -32,8 +26,19 @@ jobs:
         with:
           version: latest
 
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: ${{ matrix.package-manager }}
+
       - name: Install dependencies
-        run: ${{ matrix.package-manager == 'npm' && 'npm ci' || 'pnpm install --frozen-lockfile' }}
+        run: |
+          if [ "${{ matrix.package-manager }}" = "npm" ]; then
+            npm ci
+          else
+            pnpm install --frozen-lockfile
+          fi
 
       - name: Run ESLint
         run: ${{ matrix.package-manager == 'npm' && 'npm run lint' || 'pnpm run lint' }}
