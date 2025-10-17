@@ -33,6 +33,7 @@ jobs:
           cache: ${{ matrix.package-manager }}
 
       - name: Install dependencies
+        shell: bash
         run: |
           if [ "${{ matrix.package-manager }}" = "npm" ]; then
             npm install
@@ -41,6 +42,7 @@ jobs:
           fi
 
       - name: Run ESLint
+        shell: bash
         run: |
           if [ "${{ matrix.package-manager }}" = "npm" ]; then
             npm run lint
@@ -49,6 +51,7 @@ jobs:
           fi
 
       - name: Build project
+        shell: bash
         run: |
           if [ "${{ matrix.package-manager }}" = "npm" ]; then
             npm run build
@@ -57,6 +60,7 @@ jobs:
           fi
 
       - name: Run tests
+        shell: bash
         run: |
           if [ "${{ matrix.package-manager }}" = "npm" ]; then
             npm test
