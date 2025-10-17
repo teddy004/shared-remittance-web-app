@@ -3,12 +3,18 @@
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { mockServiceProviders } from "@/lib/mock-data/marketplace";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/card";
+import { marketplaceServiceProviders } from "@/lib/mock-data/marketplace";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/toast";
+import { useToast } from "@/components/ui/use-toast";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import { ErrorState } from "@/components/error-state";
 
@@ -22,7 +28,7 @@ export default function ProviderDetailPage() {
   const [amount, setAmount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const provider = mockServiceProviders.find((p) => p.id === params.id);
+  const provider = marketplaceServiceProviders.find((p) => p.id === params.id);
 
   if (!provider) {
     return (
@@ -40,12 +46,18 @@ export default function ProviderDetailPage() {
     const paymentAmount = parseFloat(amount);
 
     if (!accountNumber.trim()) {
-      toast({ variant: "destructive", title: "Missing Information", description: `Please enter the ${provider.accountNumberLabel}.` });
+      toast({
+        title: "Missing Information",
+        description: `Please enter the ${provider.accountNumberLabel}.`,
+      });
       return;
     }
 
     if (isNaN(paymentAmount) || paymentAmount <= 0) {
-      toast({ variant: "destructive", title: "Invalid Amount", description: "Please enter a valid payment amount." });
+      toast({
+        title: "Invalid Amount",
+        description: "Please enter a valid payment amount.",
+      });
       return;
     }
 
@@ -55,7 +67,9 @@ export default function ProviderDetailPage() {
       setIsLoading(false);
       toast({
         title: "Payment Successful!",
-        description: `Your payment of $${paymentAmount.toLocaleString()} to ${provider.name} has been submitted.`,
+        description: `Your payment of $${paymentAmount.toLocaleString()} to ${
+          provider.name
+        } has been submitted.`,
         action: (
           <div className="flex items-center">
             <CheckCircle className="h-5 w-5 text-success" />
@@ -75,7 +89,13 @@ export default function ProviderDetailPage() {
 
       <Card>
         <CardHeader className="flex-row items-center gap-4">
-          <Image src={provider.logoUrl} alt={`${provider.name} logo`} width={64} height={64} className="rounded-lg" />
+          <Image
+            src={provider.logoUrl}
+            alt={`${provider.name} logo`}
+            width={64}
+            height={64}
+            className="rounded-lg"
+          />
           <div>
             <CardTitle className="text-2xl">{provider.name}</CardTitle>
             <CardDescription>{provider.category}</CardDescription>
@@ -84,10 +104,15 @@ export default function ProviderDetailPage() {
         <CardContent className="space-y-6">
           <p className="text-muted-foreground">{provider.description}</p>
 
-          <form onSubmit={handlePayment} className="space-y-4 rounded-lg border p-4">
+          <form
+            onSubmit={handlePayment}
+            className="space-y-4 rounded-lg border p-4"
+          >
             <h4 className="font-semibold">Make a Payment</h4>
             <div className="space-y-2">
-              <Label htmlFor="accountNumber">{provider.accountNumberLabel}</Label>
+              <Label htmlFor="accountNumber">
+                {provider.accountNumberLabel}
+              </Label>
               <Input
                 id="accountNumber"
                 type="text"

@@ -6,7 +6,7 @@ export interface User {
   country: string;
   nationality: string;
   dateOfBirth: string;
-  kycStatus: "pending" | "verified" | "rejected";
+  kycStatus: "pending" | "approved" | "rejected";
   avatar?: string;
 }
 
@@ -114,7 +114,7 @@ export const mockUser: User = {
   country: "United States",
   nationality: "Ethiopian",
   dateOfBirth: "1985-03-15",
-  kycStatus: "verified",
+  kycStatus: "approved",
   avatar: "/ethiopian-man-avatar.jpg",
 };
 

@@ -8,6 +8,7 @@ import {
   mockProducts,
   mockInvestments,
   mockGiftOrders,
+  mockTransactions,
 } from "./mock-data";
 import type {
   ApiResponse,
@@ -44,7 +45,7 @@ const generateReferenceNumber = () => {
 };
 
 // In-memory storage for mock data (simulates database)
-const storage = {
+const getInitialStorage = () => ({
   users: [mockUser],
   recipients: [...mockRecipients],
   transactions: [...mockTransactions] as any[],
@@ -61,7 +62,34 @@ const storage = {
   giftOrders: [...mockGiftOrders],
   billPayments: [] as any[],
   linkedBanks: [] as any[], // Added for bank integration
+});
+
+// Lazy initialization to avoid build-time issues
+let storage: ReturnType<typeof getInitialStorage>;
+const getStorage = () => {
+  if (!storage) {
+    storage = getInitialStorage();
+  }
+  return storage;
 };
+
+// Type definitions for API responses
+interface WalletBalanceResponse {
+  usd: number;
+  etb: number;
+  lastUpdated: string;
+}
+
+interface MoneyRequestResponse {
+  id: string;
+  status: string;
+  amount: number;
+  purpose: string;
+  fromName: string;
+  toEmail: string;
+  dueDate: string;
+  createdAt: string;
+}
 
 // Helper to create API response
 function createResponse<T>(data: T, success = true): ApiResponse<T> {
@@ -76,11 +104,11 @@ function createResponse<T>(data: T, success = true): ApiResponse<T> {
 }
 
 // Helper to create error response
-function createErrorResponse(
+function createErrorResponse<T = unknown>(
   code: string,
   message: string,
   details?: unknown
-): ApiResponse {
+): ApiResponse<T> {
   return {
     success: false,
     error: {
@@ -172,7 +200,10 @@ export const apiClient = {
       await delay(800);
 
       // Validate email uniqueness
-      const existingUser = storage.users.find((u) => u.email === data.email);
+      const currentStorage = getStorage();
+      const existingUser = currentStorage.users.find(
+        (u) => u.email === data.email
+      );
       if (existingUser) {
         return createErrorResponse("AUTH_001", "Email already registered");
       }
@@ -190,12 +221,12 @@ export const apiClient = {
         avatar: "", // Assuming avatar is a new field
       };
 
-      storage.users.push(newUser);
+      currentStorage.users.push(newUser);
 
       // Generate session token
       const token = `mock_token_${generateId()}`;
       const expiresIn = 3600 * 24 * 7; // 7 days
-      storage.sessions.set(token, {
+      currentStorage.sessions.set(token, {
         userId: newUser.id,
         expiresAt: Date.now() + expiresIn * 1000,
       });
@@ -218,7 +249,8 @@ export const apiClient = {
       await delay(600);
 
       // For demo purposes, find user by email or accept any valid email format
-      let user = storage.users.find((u) => u.email === data.email);
+      const currentStorage = getStorage();
+      let user = currentStorage.users.find((u) => u.email === data.email);
 
       // If user doesn't exist and email looks valid, create demo user
       if (!user && data.email && data.email.includes("@")) {
@@ -233,10 +265,10 @@ export const apiClient = {
           country: "United States",
           nationality: "American",
           dateOfBirth: "1990-01-01",
-          kycStatus: "verified" as const,
+          kycStatus: "approved" as const,
           avatar: "",
         };
-        storage.users.push(user);
+        currentStorage.users.push(user);
         console.log(`[v0] Demo user created: ${user.email}`);
       }
 
@@ -248,7 +280,7 @@ export const apiClient = {
       // Generate session token
       const token = `mock_token_${generateId()}`;
       const expiresIn = 3600 * 24 * 7; // 7 days
-      storage.sessions.set(token, {
+      currentStorage.sessions.set(token, {
         userId: user.id,
         expiresAt: Date.now() + expiresIn * 1000,
       });
@@ -291,7 +323,9 @@ export const apiClient = {
 
     async verifyOTP(
       data: OTPRequest
-    ): Promise<ApiResponse<{ verified: boolean; token?: string; user?: unknown }>> {
+    ): Promise<
+      ApiResponse<{ verified: boolean; token?: string; user?: unknown }>
+    > {
       await delay(300);
 
       clearExpiredOTPs();
@@ -351,7 +385,7 @@ export const apiClient = {
 
     async changePassword(
       token: string,
-      currentPassword: string,
+      currentPassword: string
     ): Promise<ApiResponse<{ message: string }>> {
       await delay(500);
 
@@ -435,10 +469,7 @@ export const apiClient = {
       });
     },
 
-    async topUp(
-      token: string,
-      data: TopUpRequest
-    ): Promise<ApiResponse<any>> {
+    async topUp(token: string, data: TopUpRequest): Promise<ApiResponse<any>> {
       await delay(1200); // Simulate payment processing
 
       const session = storage.sessions.get(token);
@@ -514,10 +545,7 @@ export const apiClient = {
       return createResponse(transactions);
     },
 
-    async getById(
-      token: string,
-      id: string
-    ): Promise<ApiResponse<any>> {
+    async getById(token: string, id: string): Promise<ApiResponse<any>> {
       await delay(300);
 
       const session = storage.sessions.get(token);
@@ -1222,7 +1250,7 @@ export const apiClient = {
 
     async confirm(
       token: string | undefined,
-      transactionId: string,
+      transactionId: string
     ): Promise<ApiResponse<TransactionResponse>> {
       await delay(1000);
 
@@ -1370,7 +1398,7 @@ export const apiClient = {
           // Update user status
           const idx = storage.users.findIndex((u) => u.id === session.userId);
           if (idx !== -1) {
-            storage.users[idx].kycStatus = "verified";
+            storage.users[idx].kycStatus = "approved";
           }
         }
       }, 5000); // Auto-approve after 5 seconds for testing
@@ -1383,7 +1411,7 @@ export const apiClient = {
     },
 
     async uploadDocument(
-      token: string,
+      token: string
     ): Promise<ApiResponse<{ documentId: string; url: string }>> {
       await delay(800);
 
@@ -1433,7 +1461,7 @@ export const apiClient = {
   // Compliance APIs
   compliance: {
     async checkSanctions(
-      token: string,
+      token: string
     ): Promise<ApiResponse<{ clear: boolean; matches?: any[] }>> {
       await delay(600);
 
@@ -1572,7 +1600,7 @@ export const apiClient = {
 
       // Limits based on KYC status
       const limits =
-        user.kycStatus === "verified"
+        user.kycStatus === "approved"
           ? {
               daily: 10000,
               monthly: 50000,
@@ -1752,7 +1780,7 @@ export const apiClient = {
 
     async getBillPayments(token: string): Promise<ApiResponse<any[]>> {
       await delay(400);
-      
+
       const session = storage.sessions.get(token);
       if (!session || session.expiresAt < Date.now()) {
         return createErrorResponse("AUTH_006", "Invalid or expired session");
@@ -2080,7 +2108,7 @@ export const apiClient = {
       }
 
       // Validate KYC
-      if (user.kycStatus !== "verified") {
+      if (user.kycStatus !== "approved") {
         return createErrorResponse(
           "INVESTMENT_002",
           "KYC verification required for investments"
@@ -2522,7 +2550,7 @@ export const apiClient = {
 
     async verifyMicroDeposits(
       token: string,
-      accountId: string,
+      accountId: string
     ): Promise<ApiResponse<{ verified: boolean }>> {
       await delay(800);
 
