@@ -38,7 +38,7 @@ jobs:
           if [ "${{ matrix.package-manager }}" = "npm" ]; then
             npm install
           else
-            pnpm install --frozen-lockfile
+            pnpm install
           fi
 
       - name: Run ESLint
