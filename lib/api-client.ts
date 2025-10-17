@@ -757,7 +757,24 @@ export const apiClient = {
 
       // Validate phone number
       if (!data.phone || data.phone.length < 10) {
+        console.log("[v0] Phone validation failed:", data.phone);
         return createErrorResponse("RECIPIENT_002", "Invalid phone number");
+      }
+
+      // Validate required fields
+      if (
+        !data.name ||
+        !data.accountNumber ||
+        !data.accountType ||
+        !data.country
+      ) {
+        console.log("[v0] Missing required fields:", {
+          name: data.name,
+          accountNumber: data.accountNumber,
+          accountType: data.accountType,
+          country: data.country,
+        });
+        return createErrorResponse("RECIPIENT_003", "Missing required fields");
       }
 
       // Create recipient
