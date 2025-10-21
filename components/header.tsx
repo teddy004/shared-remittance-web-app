@@ -23,7 +23,7 @@ export function Header() {
   };
 
   return (
-    <header className="border-b bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+    <header className="border-b border-gray-200/50 bg-white/80 backdrop-blur-xl sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
         <div className="flex items-center gap-8">
           <Link
@@ -38,10 +38,14 @@ export function Header() {
         <div className="hidden md:flex items-center gap-6">
           <LanguageSelector />
           <Link href="/dashboard/notifications">
-            <Button variant="ghost" size="icon" className="relative">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative hover:bg-gray-100/50 transition-colors"
+            >
               <Bell className="h-5 w-5" />
               {unreadCount > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-error">
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-gradient-to-r from-purple-500 to-blue-500 text-white border-0">
                   {unreadCount}
                 </Badge>
               )}
