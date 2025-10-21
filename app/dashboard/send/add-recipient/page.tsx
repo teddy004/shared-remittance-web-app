@@ -50,6 +50,13 @@ const ETHIOPIAN_WALLETS = [
   { value: "hellocash", label: "HelloCash" },
 ];
 
+// Helper function to get bank name from bank code
+const getBankName = (bankCode: string): string => {
+  const allBanks = [...ETHIOPIAN_BANKS, ...ETHIOPIAN_WALLETS];
+  const bank = allBanks.find((b) => b.value === bankCode);
+  return bank?.label || bankCode;
+};
+
 export default function AddRecipientPage() {
   const [recipientType, setRecipientType] = useState<
     "personal" | "institution"
@@ -161,9 +168,9 @@ export default function AddRecipientPage() {
         phone: formData.phone,
         email: formData.email || undefined,
         accountNumber: formData.accountNumber,
-        accountType: formData.accountType, // "bank" or "mobile_wallet"
-        bank: formData.bank,
-        country: "ET",
+        accountType: formData.accountType as "bank" | "mobile_wallet",
+        country: "Ethiopia",
+        bankName: formData.bank ? getBankName(formData.bank) : undefined,
       };
 
       // Create the recipient via API

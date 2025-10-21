@@ -6,7 +6,14 @@ import { ArrowUpRight, ArrowDownLeft } from "@/lib/icons"
 import { cn } from "@/lib/utils"
 
 interface TransactionRowProps {
-  transaction: any
+  transaction: {
+    id: string;
+    recipientName: string;
+    type: "sent" | "received" | "request";
+    status: "completed" | "pending" | "failed";
+    amount: number;
+    date: string;
+  }
   onClick?: () => void
 }
 
@@ -42,7 +49,7 @@ export function TransactionRow({ transaction, onClick }: TransactionRowProps) {
       <div className="relative">
         <Avatar className="h-10 w-10">
           <AvatarImage src={`/ceholder-svg-key-9btlu.jpg?key=9btlu&height=40&width=40`} />
-          <AvatarFallback className="bg-primary/10 text-primary">
+          <AvatarFallback className="bg-purple-600/10 text-purple-600">
             {getInitials(transaction.recipientName)}
           </AvatarFallback>
         </Avatar>

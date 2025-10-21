@@ -1,7 +1,6 @@
 import {
   mockUser,
   mockRecipients,
-  mockTransactions,
   mockWalletBalances,
   mockRequests,
   mockServiceProviders,
@@ -9,6 +8,7 @@ import {
   mockProducts,
   mockInvestments,
   mockGiftOrders,
+  mockTransactions,
 } from "./mock-data";
 import type {
   ApiResponse,
@@ -16,7 +16,6 @@ import type {
   LoginRequest,
   RegisterRequest,
   OTPRequest,
-  WalletBalanceResponse,
   TopUpRequest,
   CreateTransactionRequest,
   TransactionResponse,
@@ -24,7 +23,6 @@ import type {
   CreateRecipientRequest,
   RecipientResponse,
   CreateMoneyRequestRequest,
-  MoneyRequestResponse,
   KYCSubmissionRequest,
   KYCStatusResponse,
 } from "./api-types";
@@ -47,10 +45,10 @@ const generateReferenceNumber = () => {
 };
 
 // In-memory storage for mock data (simulates database)
-const storage = {
+const getInitialStorage = () => ({
   users: [mockUser],
   recipients: [...mockRecipients],
-  transactions: [...mockTransactions],
+  transactions: [...mockTransactions] as any[],
   walletBalances: { ...mockWalletBalances },
   moneyRequests: [...mockRequests],
   sessions: new Map<string, { userId: string; expiresAt: number }>(),
@@ -64,7 +62,34 @@ const storage = {
   giftOrders: [...mockGiftOrders],
   billPayments: [] as any[],
   linkedBanks: [] as any[], // Added for bank integration
+});
+
+// Lazy initialization to avoid build-time issues
+let storage: ReturnType<typeof getInitialStorage>;
+const getStorage = () => {
+  if (!storage) {
+    storage = getInitialStorage();
+  }
+  return storage;
 };
+
+// Type definitions for API responses
+interface WalletBalanceResponse {
+  usd: number;
+  etb: number;
+  lastUpdated: string;
+}
+
+interface MoneyRequestResponse {
+  id: string;
+  status: string;
+  amount: number;
+  purpose: string;
+  fromName: string;
+  toEmail: string;
+  dueDate: string;
+  createdAt: string;
+}
 
 // Helper to create API response
 function createResponse<T>(data: T, success = true): ApiResponse<T> {
@@ -79,11 +104,11 @@ function createResponse<T>(data: T, success = true): ApiResponse<T> {
 }
 
 // Helper to create error response
-function createErrorResponse(
+function createErrorResponse<T = unknown>(
   code: string,
   message: string,
-  details?: any
-): ApiResponse {
+  details?: unknown
+): ApiResponse<T> {
   return {
     success: false,
     error: {
@@ -175,7 +200,10 @@ export const apiClient = {
       await delay(800);
 
       // Validate email uniqueness
-      const existingUser = storage.users.find((u) => u.email === data.email);
+      const currentStorage = getStorage();
+      const existingUser = currentStorage.users.find(
+        (u) => u.email === data.email
+      );
       if (existingUser) {
         return createErrorResponse("AUTH_001", "Email already registered");
       }
@@ -193,12 +221,12 @@ export const apiClient = {
         avatar: "", // Assuming avatar is a new field
       };
 
-      storage.users.push(newUser);
+      currentStorage.users.push(newUser);
 
       // Generate session token
       const token = `mock_token_${generateId()}`;
       const expiresIn = 3600 * 24 * 7; // 7 days
-      storage.sessions.set(token, {
+      currentStorage.sessions.set(token, {
         userId: newUser.id,
         expiresAt: Date.now() + expiresIn * 1000,
       });
@@ -221,7 +249,8 @@ export const apiClient = {
       await delay(600);
 
       // For demo purposes, find user by email or accept any valid email format
-      let user = storage.users.find((u) => u.email === data.email);
+      const currentStorage = getStorage();
+      let user = currentStorage.users.find((u) => u.email === data.email);
 
       // If user doesn't exist and email looks valid, create demo user
       if (!user && data.email && data.email.includes("@")) {
@@ -236,10 +265,10 @@ export const apiClient = {
           country: "United States",
           nationality: "American",
           dateOfBirth: "1990-01-01",
-          kycStatus: "verified" as const,
+          kycStatus: "approved" as const,
           avatar: "",
         };
-        storage.users.push(user);
+        currentStorage.users.push(user);
         console.log(`[v0] Demo user created: ${user.email}`);
       }
 
@@ -251,7 +280,7 @@ export const apiClient = {
       // Generate session token
       const token = `mock_token_${generateId()}`;
       const expiresIn = 3600 * 24 * 7; // 7 days
-      storage.sessions.set(token, {
+      currentStorage.sessions.set(token, {
         userId: user.id,
         expiresAt: Date.now() + expiresIn * 1000,
       });
@@ -294,7 +323,9 @@ export const apiClient = {
 
     async verifyOTP(
       data: OTPRequest
-    ): Promise<ApiResponse<{ verified: boolean; token?: string; user?: any }>> {
+    ): Promise<
+      ApiResponse<{ verified: boolean; token?: string; user?: unknown }>
+    > {
       await delay(300);
 
       clearExpiredOTPs();
@@ -354,8 +385,7 @@ export const apiClient = {
 
     async changePassword(
       token: string,
-      currentPassword: string,
-      newPassword: string
+      currentPassword: string
     ): Promise<ApiResponse<{ message: string }>> {
       await delay(500);
 
@@ -428,9 +458,7 @@ export const apiClient = {
 
   // Wallet APIs (demo - no auth required)
   wallet: {
-    async getBalance(
-      token?: string
-    ): Promise<ApiResponse<WalletBalanceResponse>> {
+    async getBalance(): Promise<ApiResponse<any>> {
       await delay(300);
 
       // Demo mode - no auth validation required
@@ -441,10 +469,7 @@ export const apiClient = {
       });
     },
 
-    async topUp(
-      token: string,
-      data: TopUpRequest
-    ): Promise<ApiResponse<WalletBalanceResponse>> {
+    async topUp(token: string, data: TopUpRequest): Promise<ApiResponse<any>> {
       await delay(1200); // Simulate payment processing
 
       const session = storage.sessions.get(token);
@@ -496,7 +521,7 @@ export const apiClient = {
     async getAll(
       token: string,
       filters?: { status?: string; type?: string; limit?: number }
-    ): Promise<ApiResponse<typeof mockTransactions>> {
+    ): Promise<ApiResponse<any[]>> {
       await delay(400);
 
       const session = storage.sessions.get(token);
@@ -520,10 +545,7 @@ export const apiClient = {
       return createResponse(transactions);
     },
 
-    async getById(
-      token: string,
-      id: string
-    ): Promise<ApiResponse<(typeof mockTransactions)[0]>> {
+    async getById(token: string, id: string): Promise<ApiResponse<any>> {
       await delay(300);
 
       const session = storage.sessions.get(token);
@@ -699,7 +721,7 @@ export const apiClient = {
 
   // Recipient APIs (demo - no auth required)
   recipients: {
-    async getAll(token?: string): Promise<ApiResponse<typeof mockRecipients>> {
+    async getAll(): Promise<ApiResponse<typeof mockRecipients>> {
       await delay(300);
 
       // Demo mode - no auth validation required
@@ -709,7 +731,7 @@ export const apiClient = {
     async getById(
       token: string | undefined,
       id: string
-    ): Promise<ApiResponse<(typeof mockRecipients)[0]>> {
+    ): Promise<ApiResponse<any>> {
       await delay(200);
 
       // Demo mode - no auth validation required
@@ -735,7 +757,24 @@ export const apiClient = {
 
       // Validate phone number
       if (!data.phone || data.phone.length < 10) {
+        console.log("[v0] Phone validation failed:", data.phone);
         return createErrorResponse("RECIPIENT_002", "Invalid phone number");
+      }
+
+      // Validate required fields
+      if (
+        !data.name ||
+        !data.accountNumber ||
+        !data.accountType ||
+        !data.country
+      ) {
+        console.log("[v0] Missing required fields:", {
+          name: data.name,
+          accountNumber: data.accountNumber,
+          accountType: data.accountType,
+          country: data.country,
+        });
+        return createErrorResponse("RECIPIENT_003", "Missing required fields");
       }
 
       // Create recipient
@@ -901,20 +940,29 @@ export const apiClient = {
     },
 
     async create(
-      token: string,
-      data: CreateMoneyRequestRequest
+      token: string | undefined,
+      data: {
+        fromName: string;
+        fromEmail: string;
+        fromPhone?: string;
+        amount: number;
+        purpose: string;
+        description?: string;
+        dueDate: string;
+      }
     ): Promise<ApiResponse<MoneyRequestResponse>> {
       await delay(700);
 
-      const session = storage.sessions.get(token);
-      if (!session || session.expiresAt < Date.now()) {
-        return createErrorResponse("AUTH_006", "Invalid or expired session");
-      }
+      // Demo mode - no auth validation required
+      // const session = storage.sessions.get(token);
+      // if (!session || session.expiresAt < Date.now()) {
+      //   return createErrorResponse("AUTH_006", "Invalid or expired session");
+      // }
 
-      const user = storage.users.find((u) => u.id === session.userId);
-      if (!user) {
-        return createErrorResponse("USER_001", "User not found");
-      }
+      // const user = storage.users.find((u) => u.id === session.userId);
+      // if (!user) {
+      //   return createErrorResponse("USER_001", "User not found");
+      // }
 
       // Validate amount
       if (data.amount <= 0) {
@@ -933,9 +981,9 @@ export const apiClient = {
       // Create money request
       const request = {
         id: `req-${generateId()}`,
-        fromName: user.name,
-        fromEmail: user.email,
-        fromAvatar: user.avatar,
+        fromName: data.fromName,
+        fromEmail: data.fromEmail,
+        fromAvatar: "", // Demo user avatar
         amount: data.amount,
         purpose: data.purpose,
         description: data.description,
@@ -945,9 +993,10 @@ export const apiClient = {
       };
 
       storage.moneyRequests.unshift(request);
+      console.log("[v0] New request added to storage:", request);
 
       // In real app, send notification to recipient via email/SMS
-      console.log(`[v0] Money request sent to ${data.recipientEmail}`);
+      console.log(`[v0] Money request sent to ${data.fromEmail}`);
 
       return createResponse<MoneyRequestResponse>({
         id: request.id,
@@ -955,7 +1004,7 @@ export const apiClient = {
         amount: request.amount,
         purpose: request.purpose,
         fromName: request.fromName,
-        toEmail: data.recipientEmail,
+        toEmail: data.fromEmail,
         dueDate: request.dueDate,
         createdAt: request.createdAt,
       });
@@ -1218,8 +1267,7 @@ export const apiClient = {
 
     async confirm(
       token: string | undefined,
-      transactionId: string,
-      otp?: string
+      transactionId: string
     ): Promise<ApiResponse<TransactionResponse>> {
       await delay(1000);
 
@@ -1367,7 +1415,7 @@ export const apiClient = {
           // Update user status
           const idx = storage.users.findIndex((u) => u.id === session.userId);
           if (idx !== -1) {
-            storage.users[idx].kycStatus = "verified";
+            storage.users[idx].kycStatus = "approved";
           }
         }
       }, 5000); // Auto-approve after 5 seconds for testing
@@ -1380,9 +1428,7 @@ export const apiClient = {
     },
 
     async uploadDocument(
-      token: string,
-      documentType: string,
-      file: string
+      token: string
     ): Promise<ApiResponse<{ documentId: string; url: string }>> {
       await delay(800);
 
@@ -1432,10 +1478,7 @@ export const apiClient = {
   // Compliance APIs
   compliance: {
     async checkSanctions(
-      token: string,
-      name: string,
-      dateOfBirth: string,
-      nationality: string
+      token: string
     ): Promise<ApiResponse<{ clear: boolean; matches?: any[] }>> {
       await delay(600);
 
@@ -1574,7 +1617,7 @@ export const apiClient = {
 
       // Limits based on KYC status
       const limits =
-        user.kycStatus === "verified"
+        user.kycStatus === "approved"
           ? {
               daily: 10000,
               monthly: 50000,
@@ -2082,7 +2125,7 @@ export const apiClient = {
       }
 
       // Validate KYC
-      if (user.kycStatus !== "verified") {
+      if (user.kycStatus !== "approved") {
         return createErrorResponse(
           "INVESTMENT_002",
           "KYC verification required for investments"
@@ -2524,8 +2567,7 @@ export const apiClient = {
 
     async verifyMicroDeposits(
       token: string,
-      accountId: string,
-      amounts: [number, number]
+      accountId: string
     ): Promise<ApiResponse<{ verified: boolean }>> {
       await delay(800);
 

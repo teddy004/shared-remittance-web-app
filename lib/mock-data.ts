@@ -6,7 +6,7 @@ export interface User {
   country: string;
   nationality: string;
   dateOfBirth: string;
-  kycStatus: "pending" | "verified" | "rejected";
+  kycStatus: "pending" | "approved" | "rejected";
   avatar?: string;
 }
 
@@ -114,7 +114,7 @@ export const mockUser: User = {
   country: "United States",
   nationality: "Ethiopian",
   dateOfBirth: "1985-03-15",
-  kycStatus: "verified",
+  kycStatus: "approved",
   avatar: "/ethiopian-man-avatar.jpg",
 };
 
@@ -344,7 +344,7 @@ export const mockProducts: Product[] = [
   },
 ];
 
-// Mock money requests
+// Mock money requests - Comprehensive examples with all statuses
 export const mockRequests: MoneyRequest[] = [
   {
     id: "req-001",
@@ -356,39 +356,115 @@ export const mockRequests: MoneyRequest[] = [
     description: "Monthly rent for December",
     status: "pending",
     dueDate: "2025-01-15",
-    createdAt: "2025-01-05",
+    createdAt: "2025-01-05T10:30:00Z",
   },
   {
     id: "req-002",
     fromName: "Michael Chen",
     fromEmail: "m.chen@email.com",
+    fromAvatar: "/placeholder.svg?height=40&width=40",
     amount: 75.5,
     purpose: "Shared Expenses",
     description: "Dinner split from last weekend",
     status: "completed",
     dueDate: "2025-01-10",
-    createdAt: "2025-01-03",
+    createdAt: "2025-01-03T14:20:00Z",
   },
   {
     id: "req-003",
     fromName: "Emily Rodriguez",
     fromEmail: "emily.r@email.com",
+    fromAvatar: "/placeholder.svg?height=40&width=40",
     amount: 200.0,
     purpose: "Personal Loan",
+    description: "Emergency family support",
     status: "pending",
     dueDate: "2025-01-20",
-    createdAt: "2025-01-06",
+    createdAt: "2025-01-06T09:15:00Z",
   },
   {
     id: "req-004",
     fromName: "David Kim",
     fromEmail: "david.kim@email.com",
+    fromAvatar: "/placeholder.svg?height=40&width=40",
     amount: 50.0,
     purpose: "Service Payment",
     description: "Website design consultation",
     status: "cancelled",
     dueDate: "2025-01-08",
-    createdAt: "2025-01-02",
+    createdAt: "2025-01-02T16:45:00Z",
+  },
+  {
+    id: "req-005",
+    fromName: "Lisa Wang",
+    fromEmail: "lisa.wang@email.com",
+    fromAvatar: "/placeholder.svg?height=40&width=40",
+    amount: 125.75,
+    purpose: "Gift",
+    description: "Birthday gift for family member",
+    status: "completed",
+    dueDate: "2025-01-12",
+    createdAt: "2025-01-04T11:00:00Z",
+  },
+  {
+    id: "req-006",
+    fromName: "Ahmed Hassan",
+    fromEmail: "ahmed.h@email.com",
+    fromAvatar: "/placeholder.svg?height=40&width=40",
+    amount: 300.0,
+    purpose: "Rent Payment",
+    description: "Monthly apartment rent",
+    status: "pending",
+    dueDate: "2025-01-25",
+    createdAt: "2025-01-07T08:30:00Z",
+  },
+  {
+    id: "req-007",
+    fromName: "Maria Garcia",
+    fromEmail: "maria.g@email.com",
+    fromAvatar: "/placeholder.svg?height=40&width=40",
+    amount: 85.0,
+    purpose: "Shared Expenses",
+    description: "Utility bills for the month",
+    status: "completed",
+    dueDate: "2025-01-14",
+    createdAt: "2025-01-01T13:15:00Z",
+  },
+  {
+    id: "req-008",
+    fromName: "James Wilson",
+    fromEmail: "james.w@email.com",
+    fromAvatar: "/placeholder.svg?height=40&width=40",
+    amount: 45.0,
+    purpose: "Service Payment",
+    description: "Freelance writing work",
+    status: "cancelled",
+    dueDate: "2025-01-05",
+    createdAt: "2024-12-30T10:00:00Z",
+  },
+  {
+    id: "req-009",
+    fromName: "Fatima Al-Zahra",
+    fromEmail: "fatima.az@email.com",
+    fromAvatar: "/placeholder.svg?height=40&width=40",
+    amount: 175.25,
+    purpose: "Personal Loan",
+    description: "School tuition assistance",
+    status: "pending",
+    dueDate: "2025-01-18",
+    createdAt: "2025-01-08T15:45:00Z",
+  },
+  {
+    id: "req-010",
+    fromName: "Robert Taylor",
+    fromEmail: "robert.t@email.com",
+    fromAvatar: "/placeholder.svg?height=40&width=40",
+    amount: 95.5,
+    purpose: "Gift",
+    description: "Holiday gift for parents",
+    status: "completed",
+    dueDate: "2025-01-16",
+    createdAt: "2025-01-02T12:30:00Z",
   },
 ];
 

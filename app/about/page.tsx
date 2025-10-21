@@ -1,143 +1,154 @@
-import Link from "next/link"
+"use client"
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { CheckCircle, Shield, Zap, Globe } from "@/lib/icons"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useTranslation } from "@/lib/use-translation"
+import { Building2, CheckCircle, Globe, Users } from "lucide-react"
+import Link from "next/link"
+
+const teamMembers = [
+  {
+    nameKey: "teamMember1Name" as const,
+    roleKey: "teamMember1Role" as const,
+    avatar: "/avatars/01.png",
+  },
+  {
+    nameKey: "teamMember2Name" as const,
+    roleKey: "teamMember2Role" as const,
+    avatar: "/avatars/02.png",
+  },
+  {
+    nameKey: "teamMember3Name" as const,
+    roleKey: "teamMember3Role" as const,
+    avatar: "/avatars/03.png",
+  },
+  {
+    nameKey: "teamMember4Name" as const,
+    roleKey: "teamMember4Role" as const,
+    avatar: "/avatars/04.png",
+  },
+]
+
+const coreValues = [
+  {
+    icon: Building2,
+    titleKey: "valueInnovationTitle" as const,
+    descriptionKey: "valueInnovationDescription" as const,
+  },
+  {
+    icon: CheckCircle,
+    titleKey: "valueSecurityTitle" as const,
+    descriptionKey: "valueSecurityDescription" as const,
+  },
+  {
+    icon: Users,
+    titleKey: "valueCommunityTitle" as const,
+    descriptionKey: "valueCommunityDescription" as const,
+  },
+  {
+    icon: Globe,
+    titleKey: "valueTransparencyTitle" as const,
+    descriptionKey: "valueTransparencyDescription" as const,
+  },
+]
 
 export default function AboutPage() {
+  const { t } = useTranslation()
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-background">
       {/* Hero Section */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white">
         <div className="container mx-auto px-6 text-center">
-          <div className="mx-auto max-w-4xl space-y-8">
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-primary">
-              About GoozX Remittance
-            </h1>
-            <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-              We are a pioneering Ethiopian crowdfunded financial technology company dedicated to revolutionizing
-              international money transfers for the Ethiopian diaspora.
-            </p>
+          <div className="mx-auto max-w-3xl space-y-6">
+            <h1 className="text-5xl md:text-6xl font-bold text-purple-700">{t("aboutTitle")}</h1>
+            <p className="text-xl text-gray-600 leading-relaxed">{t("aboutSubtitle")}</p>
           </div>
         </div>
       </section>
 
-      {/* Mission Section */}
-      <section className="py-20">
+      {/* Mission and Vision */}
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
-          <div className="mx-auto max-w-4xl">
-            <div className="grid gap-12 lg:grid-cols-2 items-center">
-              <div className="space-y-6">
-                <h2 className="text-4xl md:text-5xl font-bold text-primary">Our Mission</h2>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  To provide fast, secure, and affordable remittance services that empower Ethiopian families to thrive
-                  and strengthen their communities.
-                </p>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  We believe that money transfers should never be a barrier between loved ones. That's why we created a
-                  platform that combines cutting-edge technology with deep understanding of diaspora needs.
-                </p>
-              </div>
-              <div className="relative">
-                <div className="aspect-square bg-purple-50 rounded-3xl flex items-center justify-center shadow-xl">
-                  <div className="w-40 h-40 bg-primary rounded-full flex items-center justify-center">
-                    <CheckCircle className="w-24 h-24 text-white" />
-                  </div>
-                </div>
-              </div>
+          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <div className="space-y-4">
+              <h2 className="text-3xl font-bold text-purple-700">{t("ourMissionTitle")}</h2>
+              <p className="text-lg text-gray-600 leading-relaxed">{t("ourMissionDescription")}</p>
+            </div>
+            <div className="space-y-4">
+              <h2 className="text-3xl font-bold text-purple-700">{t("ourVisionTitle")}</h2>
+              <p className="text-lg text-gray-600 leading-relaxed">{t("ourVisionDescription")}</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Story Section */}
+      {/* Team Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
-          <div className="mx-auto max-w-4xl">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Our Story</h2>
-              <p className="text-xl text-gray-600">Found Your Tomorrow, Empower Your Family</p>
-            </div>
-            <div className="space-y-8 text-lg text-gray-600 leading-relaxed">
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Founded by Goozam Technologies in 2024, GoozX emerged from recognizing the challenges Ethiopian migrants
-                face in sending money home. Traditional transfer methods are slow, expensive, and unreliable - often
-                taking days and costing excessive fees that burden both sender and receiver.
-              </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Our founding team, drawing from Ethiopian heritage and global fintech experience, developed a modern
-                platform that enables instant, secure, and low-cost transfers. Using superior banking systems,
-                blockchain technology, and mobile banking integration, we deliver a superior user experience that has
-                helped thousands of families maintain financial connections across borders.
-              </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Today, GoozX serves customers in over 60 countries, supporting Ethiopian communities worldwide with
-                reliable, transparent, and innovative financial services.
-              </p>
-            </div>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-purple-700">{t("meetTheTeamTitle")}</h2>
+            <p className="text-xl text-gray-600 mt-4 max-w-2xl mx-auto">{t("meetTheTeamDescription")}</p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {teamMembers.map((member) => (
+              <div key={member.nameKey} className="text-center space-y-3">
+                <Avatar className="w-32 h-32 mx-auto border-4 border-primary/20 shadow-lg">
+                  <AvatarImage src={member.avatar} alt={t(member.nameKey)} />
+                  <AvatarFallback className="bg-purple-700 text-white text-3xl">
+                    {t(member.nameKey)
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-xl font-semibold text-purple-700">{t(member.nameKey)}</h3>
+                  <p className="text-gray-600">{t(member.roleKey)}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="py-20">
+      {/* Core Values */}
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
-          <div className="mx-auto max-w-6xl">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Our Values & Commitments</h2>
-              <p className="text-xl text-gray-600">Building trust through transparency and reliability</p>
-            </div>
-            <div className="grid gap-8 md:grid-cols-3">
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-purple-100 card">
-                <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <Shield className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">Security First</h3>
-                <p className="text-gray-600 text-center leading-relaxed">
-                  Bank-level encryption and compliance with international financial standards
-                </p>
-              </div>
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-purple-100 card">
-                <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <Zap className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">Innovation-Driven</h3>
-                <p className="text-gray-600 text-center leading-relaxed">
-                  Leveraging fintech to simplify global transfers for diaspora communities
-                </p>
-              </div>
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-purple-100 card">
-                <div className="w-20 h-20 bg-success rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <Globe className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">Ethiopia-Centered</h3>
-                <p className="text-gray-600 text-center leading-relaxed">
-                  Deep understanding of Ethiopian diaspora needs and cultural context
-                </p>
-              </div>
-            </div>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-purple-700">{t("ourValuesTitle")}</h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+            {coreValues.map((value) => {
+              const Icon = value.icon
+              return (
+                <Card key={value.titleKey} className="text-center p-8 border-purple-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-16 h-16 bg-purple-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <Icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-purple-700 mb-2">{t(value.titleKey)}</h3>
+                  <p className="text-gray-600 leading-relaxed">{t(value.descriptionKey)}</p>
+                </Card>
+              )
+            })}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary">
-        <div className="container mx-auto px-6 text-center">
-          <div className="mx-auto max-w-3xl space-y-8">
-            <h2 className="text-4xl md:text-5xl font-bold text-white">Join Thousands of Satisfied Customers</h2>
-            <p className="text-xl text-white/90 leading-relaxed">
-              Start your own success story with GoozX Remittance today.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/onboarding">
-                <Button className="btn-secondary rounded-xl px-8 py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  Get Started Now
-                </Button>
-              </Link>
-              <Link href="/contact">
+      <section className="py-24 bg-purple-700 text-purple-700">
+        <div className="container mx-auto px-6 text-center text-white">
+          <div className="mx-auto max-w-3xl space-y-6">
+            <h2 className="text-4xl  text-white font-bold">{t("joinUsTitle")}</h2>
+            <p className="text-xl text-white text-transparent-foreground leading-relaxed">{t("joinUsDescription")}</p>
+            <div className="pt-4">
+              <Link href="/careers">
                 <Button
-                  variant="outline"
-                  className="border-2 border-white text-white hover:bg-white/10 rounded-xl px-8 py-6 text-lg font-semibold transition-all duration-300 bg-transparent"
+                  size="lg"
+                  className="bg-white text-purple-700 hover:bg-gray-100 rounded-xl px-10 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 >
-                  Contact Us
+                  {t("viewCareers")}
                 </Button>
               </Link>
             </div>

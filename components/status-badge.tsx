@@ -11,7 +11,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
     pending: "bg-secondary/10 text-secondary-foreground border-secondary/20",
     failed: "bg-destructive/10 text-destructive border-destructive/20",
     verified: "bg-success/10 text-success border-success/20",
-    "in-progress": "bg-primary/10 text-primary border-primary/20",
+    "in-progress": "bg-purple-600/10 text-purple-600 border-purple-600/20",
   }
 
   const labels = {

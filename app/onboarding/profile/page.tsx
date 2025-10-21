@@ -184,8 +184,7 @@ export default function ProfileSetupPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="no">No</SelectItem>
-                  <SelectItem value="yes">Yes</SelectItem>
-                  <SelectItem value="unsure">I'm not sure</SelectItem>
+                  <SelectItem value="yes">Yes</SelectItem>                  <SelectItem value="unsure">I&apos;m not sure</SelectItem>
                 </SelectContent>
               </Select>
             </div>

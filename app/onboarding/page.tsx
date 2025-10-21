@@ -8,7 +8,7 @@ export default function OnboardingPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
       <Card className="w-full max-w-md border-purple-100 bg-white shadow-xl card">
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-primary shadow-lg">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-purple-600 shadow-lg">
             <span className="text-4xl font-bold text-white">Z</span>
           </div>
           <div className="space-y-2">

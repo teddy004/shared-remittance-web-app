@@ -77,80 +77,192 @@ export default function TransactionReceiptPage() {
 
   const transaction = getTransactionData();
 
-  const handleDownload = async () => {
+  const handleDownload = () => {
     try {
-      console.log("[v0] Generating PDF receipt...");
+      console.log("[v0] PDF download button clicked!");
 
       // Show loading state
       const downloadBtn = document.querySelector(
         "[data-pdf-download]"
       ) as HTMLButtonElement;
+
       if (downloadBtn) {
-        downloadBtn.innerHTML =
-          '<div class="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent mr-2" />Generating...';
+        downloadBtn.innerHTML = "⏳ Generating PDF...";
         downloadBtn.disabled = true;
       }
 
-      // Get the receipt element
-      const receiptElement = document.querySelector(
-        "[data-receipt-content]"
-      ) as HTMLElement;
-
-      if (!receiptElement) {
-        throw new Error("Receipt element not found");
-      }
-
-      // Generate canvas from the receipt element
-      const canvas = await html2canvas(receiptElement, {
-        scale: 2, // Higher quality
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#ffffff",
-        width: receiptElement.scrollWidth,
-        height: receiptElement.scrollHeight,
-      });
-
-      // Create PDF
-      const imgData = canvas.toDataURL("image/png");
+      // Create a simple text-based PDF that always works
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
         format: "a4",
       });
 
-      // Calculate dimensions to fit A4
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = pdfWidth - 20; // 10mm margin on each side
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let yPosition = 30;
 
-      // Add image to PDF
-      pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+      // Header
+      pdf.setFontSize(20);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("GOOZ X REMITTANCE", 105, yPosition, { align: "center" });
 
-      // Add footer to PDF
+      yPosition += 15;
+      pdf.setFontSize(16);
+      pdf.text("TRANSACTION RECEIPT", 105, yPosition, { align: "center" });
+
+      yPosition += 20;
+
+      // Reference Number
+      pdf.setFontSize(14);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Reference Number:", 20, yPosition);
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(12);
+      pdf.text(transaction.referenceNumber, 60, yPosition);
+
+      yPosition += 15;
+
+      // Transaction Details
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(12);
+      pdf.text("Transaction Details:", 20, yPosition);
+
+      yPosition += 10;
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+
+      const details = [
+        `You Sent: $${transaction.amount.sent.toFixed(2)} ${
+          transaction.amount.currency
+        }`,
+        `Recipient Gets: ${transaction.amount.received.toLocaleString()} ${
+          transaction.amount.receivedCurrency
+        }`,
+        `Exchange Rate: 1 ${transaction.amount.currency} = ${transaction.amount.exchangeRate} ${transaction.amount.receivedCurrency}`,
+        `Service Fee: $${transaction.amount.fee.toFixed(2)}`,
+        `Total Paid: $${transaction.amount.total.toFixed(2)}`,
+      ];
+
+      details.forEach((detail) => {
+        pdf.text(detail, 25, yPosition);
+        yPosition += 8;
+      });
+
+      yPosition += 10;
+
+      // Sender Information
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(12);
+      pdf.text("Sender Information:", 20, yPosition);
+
+      yPosition += 10;
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+
+      const senderInfo = [
+        `Name: ${transaction.sender.name}`,
+        `Email: ${transaction.sender.email}`,
+        `Country: ${transaction.sender.country}`,
+      ];
+
+      senderInfo.forEach((info) => {
+        pdf.text(info, 25, yPosition);
+        yPosition += 8;
+      });
+
+      yPosition += 10;
+
+      // Recipient Information
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(12);
+      pdf.text("Recipient Information:", 20, yPosition);
+
+      yPosition += 10;
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+
+      const recipientInfo = [
+        `Name: ${transaction.recipient.name}`,
+        `Phone: ${transaction.recipient.phone}`,
+        `Bank: ${transaction.recipient.bank}`,
+        `Account: ${transaction.recipient.accountNumber}`,
+        `Country: ${transaction.recipient.country}`,
+      ];
+
+      recipientInfo.forEach((info) => {
+        pdf.text(info, 25, yPosition);
+        yPosition += 8;
+      });
+
+      yPosition += 10;
+
+      // Timing
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(12);
+      pdf.text("Transaction Timing:", 20, yPosition);
+
+      yPosition += 10;
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(10);
+
+      pdf.text(`Initiated: ${transaction.date}`, 25, yPosition);
+      yPosition += 8;
+      pdf.text(`Completed: ${transaction.actualDelivery}`, 25, yPosition);
+
+      yPosition += 15;
+
+      // Message (if exists)
+      if (transaction.message) {
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(12);
+        pdf.text("Message:", 20, yPosition);
+
+        yPosition += 10;
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(10);
+        pdf.text(`"${transaction.message}"`, 25, yPosition);
+      }
+
+      // Footer
+      const pageHeight = pdf.internal.pageSize.getHeight();
       pdf.setFontSize(8);
       pdf.setTextColor(128, 128, 128);
       pdf.text(
         `Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}`,
-        10,
-        pdfHeight - 10
+        20,
+        pageHeight - 15
+      );
+
+      pdf.text(
+        "Thank you for using GoozX Remittance | support@goozx.com | +1-800-GOOZX",
+        20,
+        pageHeight - 10
       );
 
       // Download PDF
       const fileName = `GoozX-Receipt-${transaction.referenceNumber}.pdf`;
+      console.log("[v0] Saving PDF:", fileName);
+
       pdf.save(fileName);
 
       console.log("[v0] PDF downloaded successfully");
 
       // Reset button
       if (downloadBtn) {
-        downloadBtn.innerHTML =
-          '<svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l4-4m-4 4l-4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Download PDF';
-        downloadBtn.disabled = false;
+        downloadBtn.innerHTML = "✅ PDF Downloaded";
+        setTimeout(() => {
+          downloadBtn.innerHTML =
+            '<svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l4-4m-4 4l-4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Download PDF';
+          downloadBtn.disabled = false;
+        }, 2000);
       }
     } catch (error) {
       console.error("[v0] Error generating PDF:", error);
-      alert("Failed to generate PDF. Please try again.");
+      alert(
+        `Failed to generate PDF: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }. Check console for details.`
+      );
 
       // Reset button
       const downloadBtn = document.querySelector(

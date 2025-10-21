@@ -1,29 +1,49 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { CheckCircle2, Copy, Mail, MessageSquare, Share2, Home } from "lucide-react"
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  CheckCircle2,
+  Copy,
+  Mail,
+  MessageSquare,
+  Share2,
+  Home,
+} from "lucide-react";
 
 export default function ShareRequestPage() {
-  const router = useRouter()
-  const [copied, setCopied] = useState(false)
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [copied, setCopied] = useState(false);
 
-  const requestLink = "https://zemna.app/pay/req-abc123xyz"
-  const requestId = "REQ-2025-" + Math.floor(Math.random() * 900000 + 100000)
+  // Get request data from URL parameters
+  const requestId = searchParams.get("requestId") || "req-abc123xyz";
+  const amount = searchParams.get("amount") || "100.00";
+  const purpose = searchParams.get("purpose") || "Personal Loan";
+  const fromName = searchParams.get("fromName") || "Demo User";
+  const status = searchParams.get("status") || "pending";
+
+  const requestLink = `https://goozx.app/pay/${requestId}`;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(requestLink)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+    navigator.clipboard.writeText(requestLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleShare = (method: string) => {
     // In real app, implement sharing via different methods
-    console.log(`Sharing via ${method}`)
-  }
+    console.log(`Sharing via ${method}`);
+  };
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-4">
@@ -44,7 +64,9 @@ export default function ShareRequestPage() {
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Status</span>
-              <span className="font-medium text-secondary-foreground">Pending</span>
+              <span className="font-medium text-secondary-foreground">
+                Pending
+              </span>
             </div>
           </div>
 
@@ -52,12 +74,26 @@ export default function ShareRequestPage() {
           <div className="space-y-2">
             <label className="text-sm font-medium">Payment Link</label>
             <div className="flex gap-2">
-              <Input value={requestLink} readOnly className="h-12 font-mono text-sm" />
-              <Button onClick={handleCopy} size="icon" className="h-12 w-12 shrink-0">
-                {copied ? <CheckCircle2 className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              <Input
+                value={requestLink}
+                readOnly
+                className="h-12 font-mono text-sm"
+              />
+              <Button
+                onClick={handleCopy}
+                size="icon"
+                className="h-12 w-12 shrink-0"
+              >
+                {copied ? (
+                  <CheckCircle2 className="h-4 w-4" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
               </Button>
             </div>
-            {copied && <p className="text-xs text-success">Link copied to clipboard!</p>}
+            {copied && (
+              <p className="text-xs text-success">Link copied to clipboard!</p>
+            )}
           </div>
 
           {/* Share Options */}
@@ -93,10 +129,17 @@ export default function ShareRequestPage() {
 
           {/* Actions */}
           <div className="space-y-3">
-            <Button onClick={() => router.push("/dashboard/request")} variant="outline" className="h-12 w-full gap-2">
+            <Button
+              onClick={() => router.push("/dashboard/request")}
+              variant="outline"
+              className="h-12 w-full gap-2"
+            >
               View All Requests
             </Button>
-            <Button onClick={() => router.push("/dashboard")} className="h-12 w-full gap-2">
+            <Button
+              onClick={() => router.push("/dashboard")}
+              className="h-12 w-full gap-2"
+            >
               <Home className="h-4 w-4" />
               Back to Dashboard
             </Button>
@@ -104,5 +147,5 @@ export default function ShareRequestPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
