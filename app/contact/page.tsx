@@ -1,88 +1,43 @@
-import type { Metadata } from "next"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MapPin, Phone, Mail, Clock, Twitter, Facebook, Linkedin, MessageCircle } from "@/lib/icons"
+"use client";
 
-export const metadata: Metadata = {
-  title: "Contact Us | GoozX Remittance",
-  description: "Get in touch with our support team for assistance with your international money transfers.",
-}
+import { Button } from "@/components/button";
+import { Card, CardContent } from "@/components/card";
+import { Input } from "@/components/input";
+import { Label } from "@/components/label";
+import { Textarea } from "@/components/textarea";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  Facebook,
+  Twitter,
+  Linkedin,
+  MessageCircle,
+} from "@/lib/icons";
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
       {/* Hero Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6 text-center">
-          <div className="mx-auto max-w-3xl space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold text-primary">Get in Touch</h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              We're here to help! Reach out to our support team for assistance with your remittance needs.
-            </p>
-            <p className="text-lg text-gray-500">We respond within 24 hours during business days.</p>
-          </div>
+      <section className="py-20 bg-gradient-to-br from-purple-900 via-purple-800 to-blue-900 relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-full blur-2xl animate-pulse"></div>
+          <div className="absolute top-40 right-32 w-24 h-24 bg-gradient-to-r from-blue-500/25 to-purple-500/25 rounded-full blur-xl animate-pulse delay-500"></div>
+          <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
-      </section>
 
-      {/* Contact Information */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto">
-            <Card className="border-purple-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 card">
-              <CardHeader>
-                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <Mail className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-2xl text-center">Email Support</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-gray-600 mb-4">Contact us via email for detailed inquiries</p>
-                <p className="text-lg font-semibold text-primary">support@goozx.com</p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-purple-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 card">
-              <CardHeader>
-                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <Phone className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-2xl text-center">Phone Support</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-gray-600 mb-4">Call us for immediate assistance</p>
-                <p className="text-lg font-semibold text-primary">+251 11 123 4567</p>
-                <p className="text-sm text-gray-500 mt-2">Ethiopia office</p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-purple-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 card">
-              <CardHeader>
-                <div className="w-16 h-16 bg-success rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <Clock className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-2xl text-center">Business Hours</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-gray-600 mb-4">When we're available</p>
-                <p className="text-lg font-semibold text-success">Mon-Fri: 9:00 AM - 6:00 PM EST</p>
-                <p className="text-sm text-gray-500 mt-2">Support Response: Within 24 hours</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="text-center mt-12">
-            <p className="text-lg text-gray-600">
-              Have questions? Check our
-              <a
-                href="/faq"
-                className="text-primary hover:text-accent font-semibold ml-1 underline decoration-2 underline-offset-4"
-              >
-                FAQ page
-              </a>{" "}
-              for quick answers.
+        <div className="container mx-auto px-6 text-center relative z-10">
+          <div className="mx-auto max-w-4xl space-y-8">
+            <h1 className="text-5xl md:text-6xl font-black tracking-tight">
+              <span className="bg-gradient-to-r from-white via-purple-100 to-blue-100 bg-clip-text text-transparent drop-shadow-2xl">
+                Get in Touch
+              </span>
+            </h1>
+            <p className="text-xl text-purple-100 leading-relaxed max-w-3xl mx-auto font-light drop-shadow-lg">
+              We're here to help you with any questions or concerns. Reach out
+              to us through any of our contact methods below.
             </p>
           </div>
         </div>
@@ -92,8 +47,12 @@ export default function ContactPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6 max-w-4xl">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Send us a Message</h2>
-            <p className="text-xl text-gray-600">Fill out the form below and we'll get back to you within 24 hours.</p>
+            <h2 className="text-4xl md:text-5xl font-black text-primary mb-4">
+              Send us a Message
+            </h2>
+            <p className="text-xl text-gray-600">
+              Fill out the form below and we'll get back to you within 24 hours.
+            </p>
           </div>
 
           <Card className="border-purple-100 shadow-xl card">
@@ -112,24 +71,36 @@ export default function ContactPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="Enter your email address" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email address"
+                  />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="subject">Subject</Label>
-                  <Input id="subject" placeholder="What can we help you with?" />
+                  <Input
+                    id="subject"
+                    placeholder="What can we help you with?"
+                  />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
-                  <Textarea id="message" placeholder="Describe your question or issue in detail" rows={5} />
+                  <Textarea
+                    id="message"
+                    placeholder="Describe your question or issue in detail"
+                    rows={5}
+                  />
                 </div>
 
                 <Button
                   type="submit"
-                  className="btn-primary w-full py-6 text-lg font-semibold rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+                  className="group relative w-full py-6 text-lg font-semibold rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
                 >
-                  Send Message
+                  <span className="relative z-10">Send Message</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
                 </Button>
               </form>
             </CardContent>
@@ -138,62 +109,146 @@ export default function ContactPage() {
       </section>
 
       {/* Office and Social Media */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
+      <section className="py-20 bg-gradient-to-br from-slate-50 via-purple-50/30 to-blue-50/30 relative overflow-hidden">
+        {/* Subtle background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-full blur-2xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-40 h-40 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div className="container mx-auto px-6 relative z-10">
           <div className="grid gap-12 lg:grid-cols-2 max-w-6xl mx-auto">
-            <div>
-              <h2 className="text-4xl font-bold text-primary mb-6">Visit Our Office</h2>
+            <div className="group">
+              <h2 className="text-4xl font-black text-gray-800 mb-6">
+                Visit Our Office
+              </h2>
               <div className="space-y-4">
-                <div className="flex items-start gap-4 bg-white p-6 rounded-2xl shadow-lg border border-purple-100 card">
-                  <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Goozam Technologies HQ</h3>
-                    <p className="text-gray-600">Bole Sub-city, Addis Ababa, Ethiopia</p>
-                    <p className="text-gray-500 text-sm mt-2">
-                      Located in the heart of Ethiopia's tech innovation district
-                    </p>
+                <div className="group relative bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-purple-200/60 hover:border-purple-400/80 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="relative z-10 flex items-start gap-6">
+                    <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <MapPin className="w-8 h-8 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-black text-gray-900 mb-3">
+                        Goozam Technologies HQ
+                      </h3>
+                      <p className="text-gray-700 text-lg mb-2 font-medium">
+                        Bole Sub-city, Addis Ababa, Ethiopia
+                      </p>
+                      <p className="text-gray-600 leading-relaxed mb-6">
+                        Located in the heart of Ethiopia's tech innovation
+                        district, our headquarters serves as the central hub for
+                        our global operations.
+                      </p>
+
+                      {/* Contact Information */}
+                      <div className="space-y-4 pt-4 border-t border-gray-200">
+                        <div>
+                          <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                            Email Support
+                          </h4>
+                          <p className="text-gray-600">support@goozx.com</p>
+                          <p className="text-sm text-gray-500">
+                            Response time: Within 2 hours
+                          </p>
+                        </div>
+
+                        <div>
+                          <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                            Phone Support
+                          </h4>
+                          <p className="text-gray-600">+251 11 123 4567</p>
+                          <p className="text-sm text-gray-500">
+                            Ethiopia Office • Mon-Fri 9AM-6PM EST
+                          </p>
+                        </div>
+
+                        <div>
+                          <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                            Business Hours
+                          </h4>
+                          <p className="text-gray-600">
+                            Mon-Fri: 9:00 AM - 6:00 PM EST
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Emergency support available 24/7
+                          </p>
+                        </div>
+
+                        <div className="pt-2">
+                          <p className="text-gray-600">
+                            Have questions? Check our{" "}
+                            <a
+                              href="/faq"
+                              className="text-purple-600 hover:text-purple-700 font-semibold underline decoration-2 underline-offset-4 transition-colors"
+                            >
+                              FAQ page
+                            </a>{" "}
+                            for quick answers.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div>
-              <h2 className="text-4xl font-bold text-primary mb-6">Follow Us</h2>
-              <p className="text-gray-600 mb-6 text-lg">
-                Stay connected and get the latest updates about our services and features.
+            <div className="group">
+              <h2 className="text-4xl font-black text-gray-800 mb-6">
+                Follow Us
+              </h2>
+              <p className="text-gray-700 mb-8 text-lg leading-relaxed">
+                Stay connected and get the latest updates about our services and
+                features. Join our community of satisfied customers worldwide.
               </p>
-              <div className="flex gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <a
                   href="#"
-                  className="w-14 h-14 bg-primary hover:bg-accent text-white rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
+                  className="group relative p-6 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-2xl shadow-lg"
                 >
-                  <Twitter className="w-6 h-6" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
+                  <Twitter className="w-8 h-8 mb-2 relative z-10" />
+                  <span className="text-sm font-semibold relative z-10">
+                    Twitter
+                  </span>
                 </a>
                 <a
                   href="#"
-                  className="w-14 h-14 bg-primary hover:bg-accent text-white rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
+                  className="group relative p-6 bg-gradient-to-br from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-2xl shadow-lg"
                 >
-                  <Facebook className="w-6 h-6" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
+                  <Facebook className="w-8 h-8 mb-2 relative z-10" />
+                  <span className="text-sm font-semibold relative z-10">
+                    Facebook
+                  </span>
                 </a>
                 <a
                   href="#"
-                  className="w-14 h-14 bg-primary hover:bg-accent text-white rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
+                  className="group relative p-6 bg-gradient-to-br from-blue-700 to-blue-900 hover:from-blue-800 hover:to-indigo-900 text-white rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-2xl shadow-lg"
                 >
-                  <Linkedin className="w-6 h-6" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-700 to-blue-900 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
+                  <Linkedin className="w-8 h-8 mb-2 relative z-10" />
+                  <span className="text-sm font-semibold relative z-10">
+                    LinkedIn
+                  </span>
                 </a>
                 <a
                   href="#"
-                  className="w-14 h-14 bg-success hover:bg-success/90 text-white rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
+                  className="group relative p-6 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-2xl flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-2xl shadow-lg"
                 >
-                  <MessageCircle className="w-6 h-6" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
+                  <MessageCircle className="w-8 h-8 mb-2 relative z-10" />
+                  <span className="text-sm font-semibold relative z-10">
+                    WhatsApp
+                  </span>
                 </a>
               </div>
             </div>
           </div>
         </div>
       </section>
-    </div>
-  )
+    </>
+  );
 }

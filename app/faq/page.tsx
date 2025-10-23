@@ -1,16 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent } from "@/components/ui/card"
-import { ChevronDown, Search, DollarSign, Clock, Shield, FileText, User, Globe } from "@/lib/icons"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  ChevronDown,
+  Search,
+  DollarSign,
+  Clock,
+  Shield,
+  FileText,
+  User,
+  Globe,
+} from "@/lib/icons";
 
 export default function FaqPage() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const faqCategories = [
     {
@@ -138,7 +147,7 @@ export default function FaqPage() {
         },
       ],
     },
-  ]
+  ];
 
   const filteredCategories = faqCategories
     .map((category) => ({
@@ -146,38 +155,51 @@ export default function FaqPage() {
       faqs: category.faqs.filter(
         (faq) =>
           faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          faq.answer.toLowerCase().includes(searchQuery.toLowerCase()),
+          faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
       ),
     }))
     .filter((category) => category.faqs.length > 0)
-    .filter((category) => !selectedCategory || category.id === selectedCategory)
+    .filter(
+      (category) => !selectedCategory || category.id === selectedCategory
+    );
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="py-20 bg-white border-b border-purple-100">
-        <div className="container mx-auto px-6 text-center">
+      <section className="py-20 bg-gradient-to-br from-[#750BC0] via-purple-800 to-blue-900 relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-full blur-2xl animate-pulse"></div>
+          <div className="absolute top-40 right-32 w-24 h-24 bg-gradient-to-r from-blue-500/25 to-purple-500/25 rounded-full blur-xl animate-pulse delay-500"></div>
+          <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+        <div className="container mx-auto px-6 text-center relative z-10">
           <div className="mx-auto max-w-3xl space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold text-primary">Frequently Asked Questions</h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              Find quick answers to common questions about our remittance services.
+            <h1 className="text-5xl md:text-6xl font-black">
+              <span className="bg-gradient-to-r from-white via-purple-100 to-blue-100 bg-clip-text text-transparent drop-shadow-2xl">
+                Frequently Asked Questions
+              </span>
+            </h1>
+            <p className="text-xl text-purple-100 leading-relaxed font-light drop-shadow-lg">
+              Find quick answers to common questions about our remittance
+              services.
             </p>
 
             <div className="relative max-w-2xl mx-auto mt-8">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70" />
               <Input
                 type="text"
                 placeholder="Search for answers..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-4 py-6 text-lg border-2 border-purple-200 focus:border-primary rounded-xl shadow-sm"
+                className="pl-12 pr-4 py-6 text-lg bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white placeholder-white/70 focus:border-white/40 rounded-xl shadow-lg"
               />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-8 bg-white/50 backdrop-blur-sm border-b border-purple-100 sticky top-0 z-10">
+      <section className="py-8 bg-white/80 backdrop-blur-sm border-b border-purple-100 sticky top-0 z-10">
         <div className="container mx-auto px-6">
           <div className="flex flex-wrap gap-3 justify-center">
             <Button
@@ -185,7 +207,7 @@ export default function FaqPage() {
               variant={selectedCategory === null ? "default" : "outline"}
               className={`rounded-full px-6 py-2 transition-all duration-300 ${
                 selectedCategory === null
-                  ? "btn-primary shadow-lg"
+                  ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg"
                   : "border-purple-200 hover:border-purple-400 hover:bg-purple-50"
               }`}
             >
@@ -193,22 +215,24 @@ export default function FaqPage() {
               All Topics
             </Button>
             {faqCategories.map((category) => {
-              const Icon = category.icon
+              const Icon = category.icon;
               return (
                 <Button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  variant={selectedCategory === category.id ? "default" : "outline"}
+                  variant={
+                    selectedCategory === category.id ? "default" : "outline"
+                  }
                   className={`rounded-full px-6 py-2 transition-all duration-300 ${
                     selectedCategory === category.id
-                      ? "btn-primary shadow-lg"
+                      ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg"
                       : "border-purple-200 hover:border-purple-400 hover:bg-purple-50"
                   }`}
                 >
                   <Icon className="w-4 h-4 mr-2" />
                   {category.name}
                 </Button>
-              )
+              );
             })}
           </div>
         </div>
@@ -219,10 +243,12 @@ export default function FaqPage() {
         <div className="container mx-auto px-6 max-w-5xl">
           {filteredCategories.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-xl text-gray-500">No results found for "{searchQuery}"</p>
+              <p className="text-xl text-gray-500">
+                No results found for "{searchQuery}"
+              </p>
               <Button
                 onClick={() => setSearchQuery("")}
-                className="btn-primary mt-6 hover:shadow-lg transition-all duration-300"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white mt-6 hover:shadow-lg transition-all duration-300"
               >
                 Clear Search
               </Button>
@@ -230,36 +256,46 @@ export default function FaqPage() {
           ) : (
             <div className="space-y-12">
               {filteredCategories.map((category, categoryIndex) => {
-                const Icon = category.icon
+                const Icon = category.icon;
                 return (
                   <div key={category.id} className="space-y-6">
                     <div className="flex items-center gap-4 mb-6">
-                      <div className="p-3 rounded-xl bg-primary shadow-lg">
+                      <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 shadow-lg">
                         <Icon className="w-6 h-6 text-white" />
                       </div>
-                      <h2 className="text-3xl font-bold text-gray-900">{category.name}</h2>
+                      <h2 className="text-3xl font-black text-gray-900">
+                        {category.name}
+                      </h2>
                     </div>
 
                     <div className="space-y-4">
                       {category.faqs.map((faq, faqIndex) => {
-                        const globalIndex = categoryIndex * 100 + faqIndex
+                        const globalIndex = categoryIndex * 100 + faqIndex;
                         return (
                           <Card
                             key={globalIndex}
-                            className="border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden card"
+                            className="border-purple-100 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden card hover:scale-[1.02]"
                           >
                             <CardContent className="p-0">
                               <button
-                                onClick={() => setOpenIndex(openIndex === globalIndex ? null : globalIndex)}
+                                onClick={() =>
+                                  setOpenIndex(
+                                    openIndex === globalIndex
+                                      ? null
+                                      : globalIndex
+                                  )
+                                }
                                 className="w-full text-left p-6 hover:bg-purple-50/50 transition-colors duration-200"
                               >
                                 <div className="flex items-start justify-between gap-4">
-                                  <h3 className="font-semibold text-lg text-gray-900 leading-relaxed pr-4">
+                                  <h3 className="font-bold text-lg text-gray-900 leading-relaxed pr-4">
                                     {faq.question}
                                   </h3>
                                   <ChevronDown
                                     className={`w-5 h-5 text-primary flex-shrink-0 transition-transform duration-300 ${
-                                      openIndex === globalIndex ? "rotate-180" : ""
+                                      openIndex === globalIndex
+                                        ? "rotate-180"
+                                        : ""
                                     }`}
                                   />
                                 </div>
@@ -267,27 +303,33 @@ export default function FaqPage() {
                               {openIndex === globalIndex && (
                                 <div className="px-6 pb-6 animate-in fade-in slide-in-from-top-2 duration-300">
                                   <div className="pt-4 border-t border-purple-100">
-                                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                                    <p className="text-gray-600 leading-relaxed">
+                                      {faq.answer}
+                                    </p>
                                   </div>
                                 </div>
                               )}
                             </CardContent>
                           </Card>
-                        )
+                        );
                       })}
                     </div>
                   </div>
-                )
+                );
               })}
             </div>
           )}
 
-          <div className="text-center mt-20 bg-primary rounded-3xl p-12 shadow-2xl">
-            <h3 className="text-3xl text-white font-bold mb-4">Still have questions?</h3>
-            <p className="text-xl text-white/90 mb-8">We're here to help 24/7</p>
+          <div className="text-center mt-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl p-12 shadow-2xl">
+            <h3 className="text-3xl text-white font-black mb-4">
+              Still have questions?
+            </h3>
+            <p className="text-xl text-white/90 mb-8">
+              We're here to help 24/7
+            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
-                <Button className="btn-secondary rounded-xl px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <Button className="bg-white text-purple-600 hover:bg-purple-50 rounded-xl px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                   Contact Support
                 </Button>
               </Link>
@@ -304,5 +346,5 @@ export default function FaqPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }

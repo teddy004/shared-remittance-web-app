@@ -16,7 +16,7 @@ export default function HomePage() {
       {/* Modern Hero Section with Tech-inspired Design */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         {/* Animated Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-purple-700 to-blue-900">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#750BC0] via-purple-800 to-blue-900">
           {/* Infinite Geometric Planes - No Visible Borders */}
           <div className="absolute inset-0 overflow-hidden">
             {/* Top-left infinite plane */}
@@ -53,7 +53,7 @@ export default function HomePage() {
         <div className="container mx-auto px-6 text-center relative z-10">
           <div className="mx-auto max-w-6xl space-y-12">
             {/* Main Heading with Modern Typography */}
-            <div className="space-y-4">
+            <div className="space-y-4 animate-fade-in-up">
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[0.9]">
                 <span className="bg-gradient-to-r from-white via-purple-100 to-blue-100 bg-clip-text text-transparent">
                   REMITTANCE
@@ -63,13 +63,13 @@ export default function HomePage() {
             </div>
 
             {/* Subtitle */}
-            <p className="text-lg md:text-xl lg:text-2xl text-gray-300 leading-relaxed max-w-3xl mx-auto font-light drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] drop-shadow-[0_0_40px_rgba(255,255,255,0.6)] drop-shadow-[0_0_80px_rgba(255,255,255,0.4)] drop-shadow-[0_0_120px_rgba(255,255,255,0.3)]">
+            <p className="text-lg md:text-xl lg:text-2xl text-purple-100 leading-relaxed max-w-3xl mx-auto font-light drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] drop-shadow-[0_0_40px_rgba(255,255,255,0.6)] drop-shadow-[0_0_80px_rgba(255,255,255,0.4)] drop-shadow-[0_0_120px_rgba(255,255,255,0.3)] animate-fade-in-up delay-300">
               Fast, secure, and affordable international money transfers. Send
               money across borders, instantly.
             </p>
 
             {/* CTA Buttons with Modern Styling */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8 animate-fade-in-up delay-500">
               <Link
                 href="/onboarding"
                 className="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold text-lg rounded-xl hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-2xl shadow-purple-500/25"
